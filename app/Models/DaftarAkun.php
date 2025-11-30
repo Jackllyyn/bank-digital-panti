@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class DaftarAkun extends Model
+{
+    protected $table = 'daftar_akun';
+    protected $primaryKey = 'kode_akun';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'kode_akun', 'nama_akun', 'kelompok', 'posisi_saldo', 'saldo_awal', 'tahun'
+    ];
+}
