@@ -1,12 +1,19 @@
+
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use App\Models\LogAktivitas;
 
-class LogAktivitas extends Model
+class AuditLogController extends Controller
 {
-    /** @use HasFactory<\Database\Factories\LogAktivitasFactory> */
-    use HasFactory;
+    public function index()
+    {
+        $logs = LogAktivitas::with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(25);
+
+        return view('admin.audit-log.index', compact('logs'));
+    }
 }

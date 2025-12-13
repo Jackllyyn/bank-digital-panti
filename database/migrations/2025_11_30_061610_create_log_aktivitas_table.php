@@ -9,18 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up(): void
+
+public function up()
 {
     Schema::create('log_aktivitas', function (Blueprint $table) {
         $table->id();
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->string('aktivitas', 255);
+        $table->string('aktivitas');        
+        $table->string('model');            
+        $table->unsignedBigInteger('model_id')->nullable();
         $table->text('keterangan')->nullable();
-        $table->string('ip_address', 45)->nullable();
+        $table->ipAddress('ip_address')->nullable();
         $table->timestamps();
     });
 }
-
     /**
      * Reverse the migrations.
      */
