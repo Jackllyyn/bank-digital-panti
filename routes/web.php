@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AnakPantiController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\ImportController;
+use App\Http\Controllers\Admin\PenerimaanDonasiController; // Tambahkan ini
 
 // ====================== DASHBOARD REDIRECT ======================
 Route::get('/dashboard', function () {
@@ -42,33 +43,36 @@ Route::prefix('admin')
         Route::post('donatur/import', [ImportController::class, 'donatur'])->name('donatur.import');
         Route::get('donatur/{kode_donatur}/struk', [DonaturController::class, 'struk'])
             ->name('donatur.struk');
+
         // Anak Panti - Lengkap
         Route::resource('anak-panti', AnakPantiController::class)->except(['show']);
-        Route::post('anak-panti/import', [AnakPantiController::class, 'import'])->name('anak-panti.import');
+        Route::post('anak-panti/import', [ImportController::class, 'anakPanti'])->name('anak-panti.import');
         Route::post('anak-panti/truncate', [AnakPantiController::class, 'truncate'])->name('anak-panti.truncate');
 
-        // Daftar Akun, Aset Tetap, Inventaris
-        Route::resource('daftar-akun', App\Http\Controllers\Admin\DaftarAkunController::class);
-        Route::resource('aset-tetap', App\Http\Controllers\Admin\AsetTetapController::class);
-        Route::resource('inventaris', App\Http\Controllers\Admin\InventarisController::class);
+        // Penerimaan Donasi - Admin (full access)
+        Route::resource('penerimaan-donasi', PenerimaanDonasiController::class)->except(['show']);
+        
+        // TAMBAHAN: Route untuk cetak struk donasi per transaksi
+        Route::get('penerimaan-donasi/{id}/struk', [PenerimaanDonasiController::class, 'struk'])
+            ->name('penerimaan-donasi.struk');
 
-        // Penerimaan Donasi & Pengeluaran (admin)
-        Route::resource('penerimaan-donasi', App\Http\Controllers\Admin\PenerimaanDonasiController::class);
-        Route::resource('pengeluaran', App\Http\Controllers\Admin\PengeluaranController::class);
+        // Pengeluaran
+        Route::resource('pengeluaran', App\Http\Controllers\Admin\PengeluaranController::class)->except(['show']);
 
         // Jurnal Umum
-        Route::get('jurnal-umum', [App\Http\Controllers\Admin\JurnalUmumController::class, 'index'])->name('jurnal-umum.index');
-        Route::get('jurnal-umum/export/excel', [App\Http\Controllers\Admin\ExportController::class, 'jurnalExcel'])->name('jurnal.excel');
-        Route::get('jurnal-umum/export/pdf', [App\Http\Controllers\Admin\ExportController::class, 'jurnalPdf'])->name('jurnal.pdf');
+        Route::resource('jurnal-umum', App\Http\Controllers\Admin\JurnalUmumController::class)->except(['show']);
 
-        // Saldo Awal - Lengkap + Semua Export (termasuk kelompok)
-        Route::get('saldo-awal', [App\Http\Controllers\Admin\SaldoAwalController::class, 'index'])->name('saldo-awal.index');
-        Route::post('saldo-awal', [App\Http\Controllers\Admin\SaldoAwalController::class, 'store'])->name('saldo-awal.store');
-        Route::get('saldo-awal/export-all', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportAll'])->name('saldo-awal.export-all');
-        Route::get('saldo-awal/export-pdf', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportPdf'])->name('saldo-awal.export-pdf');
-        Route::get('saldo-awal/export-kelompok', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportKelompok'])->name('saldo-awal.export-kelompok');
+        // Daftar Akun & Saldo Awal
+        Route::resource('daftar-akun', App\Http\Controllers\Admin\DaftarAkunController::class)->except(['show']);
+        Route::resource('saldo-awal', App\Http\Controllers\Admin\SaldoAwalController::class)->only(['index', 'store']);
+        Route::get('saldo-awal/export/all', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportAll'])->name('saldo-awal.export.all');
+        Route::post('saldo-awal/export/kelompok', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportKelompok'])->name('saldo-awal.export.kelompok');
+        Route::get('saldo-awal/export/pdf', [App\Http\Controllers\Admin\SaldoAwalController::class, 'exportPdf'])->name('saldo-awal.pdf');
 
-        // Laporan & Export
+        // Aset Tetap
+        Route::resource('aset-tetap', App\Http\Controllers\Admin\AsetTetapController::class)->except(['show']);
+
+        // Laporan
         Route::get('laporan', [App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
         Route::get('laporan/export/pdf', [App\Http\Controllers\Admin\ExportController::class, 'laporanPdf'])->name('laporan.pdf');
         Route::get('laporan/export/excel', [App\Http\Controllers\Admin\ExportController::class, 'laporanExcel'])->name('laporan.excel');
@@ -84,6 +88,10 @@ Route::prefix('admin')
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::resource('staff', StaffController::class)->except(['show']);
+   
+        Route::resource('inventaris', App\Http\Controllers\Admin\InventarisController::class)
+            ->except(['show']);
+   
     });
 
 // ====================== STAFF AREA ======================
@@ -93,13 +101,17 @@ Route::prefix('staff')
     ->group(function () {
         Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
 
-        // Penerimaan Donasi
+        // Penerimaan Donasi - Staff hanya create & store
         Route::get('penerimaan-donasi/create', [App\Http\Controllers\Staff\PenerimaanDonasiController::class, 'create'])
             ->name('penerimaan-donasi.create');
         Route::post('penerimaan-donasi', [App\Http\Controllers\Staff\PenerimaanDonasiController::class, 'store'])
             ->name('penerimaan-donasi.store');
 
-        // Pengeluaran
+        // TAMBAHAN: Staff juga bisa cetak struk transaksi yang dibuatnya
+        Route::get('penerimaan-donasi/{id}/struk', [App\Http\Controllers\Admin\PenerimaanDonasiController::class, 'struk'])
+            ->name('penerimaan-donasi.struk');
+
+        // Pengeluaran - Staff
         Route::get('pengeluaran/create', [App\Http\Controllers\Staff\PengeluaranController::class, 'create'])
             ->name('pengeluaran.create');
         Route::post('pengeluaran', [App\Http\Controllers\Staff\PengeluaranController::class, 'store'])
@@ -108,6 +120,9 @@ Route::prefix('staff')
         // Jurnal Umum (read-only untuk staff)
         Route::get('jurnal-umum', [App\Http\Controllers\Admin\JurnalUmumController::class, 'index'])
             ->name('jurnal-umum.index');
+
+
+
     });
 
 // ====================== AUTH & WELCOME ======================

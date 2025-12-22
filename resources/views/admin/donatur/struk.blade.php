@@ -3,190 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Bukti Donasi - {{ $donatur->nama }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            line-height: 1.5;
-            background: #fff;
-        }
-        .struk {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 30px;
-            border: 2px solid #000;
-            border-radius: 8px;
-            background: #fff;
-        }
-        .kop {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .kop img {
-            max-height: 80px;
-            margin-bottom: 10px;
-        }
-        .kop h1 { margin: 0; font-size: 22px; font-weight: bold; text-transform: uppercase; }
-        .kop h2 { margin: 4px 0; font-size: 16px; font-weight: bold; }
-        .kop p { margin: 3px 0; font-size: 13px; }
-        .hr-kop {
-            width: 100%;
-            height: 2px;
-            background: #000;
-            margin: 15px 0 20px;
-        }
-        .title {
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin: 15px 0 25px;
-            text-transform: uppercase;
-        }
-        .terima {
-            margin: 20px 0 25px;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-        table {
-            width: 100%;
-            margin: 15px 0 20px;
-            border-collapse: collapse;
-        }
-        table td {
-            padding: 6px 0;
-            vertical-align: top;
-        }
-        .label { width: 170px; font-weight: bold; }
-        .jumlah { font-size: 18px; font-weight: bold; color: #000; }
-        .terbilang { font-style: italic; margin-top: 4px; font-size: 14px; color: #444; }
-        .tanggal {
-            text-align: right;
-            margin: 25px 0 40px;
-            font-size: 14px;
-        }
-        .ttd {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 50px;
-            margin-top: 50px;
-        }
-        .ttd div {
-            text-align: center;
-            width: 220px;
-        }
-        .ttd .line {
-            border-top: 2px solid #000;
-            margin-top: 50px;
-            margin-bottom: 8px;
-        }
-        .ttd .nama {
-            font-weight: bold;
-            font-size: 15px;
-            margin-top: 5px;
-        }
-        .ttd .jabatan {
-            font-size: 14px;
-            margin-top: 2px;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #000; background: #fff; font-size: 12px; line-height: 1.4; }
+        .struk { width: 100%; max-width: 350px; margin: 20px auto; padding: 20px; border: 1px solid #000; border-radius: 6px; background: #fff; box-sizing: border-box; }
+        .kop { text-align: center; margin-bottom: 15px; }
+        .kop img { max-height: 60px; margin-bottom: 8px; }
+        .kop h1 { margin: 0; font-size: 16px; font-weight: bold; text-transform: uppercase; }
+        .kop h2 { margin: 4px 0; font-size: 13px; font-weight: bold; }
+        .kop p { margin: 2px 0; font-size: 11px; }
+        .hr-kop { height: 2px; background: #000; margin: 12px 0; }
+        .title { text-align: center; font-size: 15px; font-weight: bold; margin: 15px 0; text-transform: uppercase; }
+        table { width: 100%; margin: 10px 0; border-collapse: collapse; font-size: 12px; }
+        table td { padding: 4px 0; vertical-align: top; }
+        .label { width: 100px; font-weight: bold; }
+        .jumlah { font-size: 16px; font-weight: bold; }
+        .terbilang { font-style: italic; font-size: 11px; color: #444; margin-top: 5px; }
+        .tanggal { text-align: right; margin: 20px 0 30px; font-size: 12px; }
+        .ttd { display: flex; justify-content: space-between; margin-top: 30px; font-size: 12px; }
+        .ttd div { text-align: center; width: 48%; }
+        .ttd .jabatan { font-weight: bold; margin-bottom: 5px; }
+        .ttd .line { border-top: 1px solid #000; margin: 40px 0 8px 0; }
+        .ttd .nama { font-weight: bold; }
+        .footer { text-align: center; margin-top: 30px; font-size: 10px; color: #555; }
+        @media print { body { margin: 0; padding: 10px; } .struk { margin: 0; padding: 15px; max-width: none; } }
     </style>
 </head>
-<body>
+<body onload="window.print(); window.onafterprint = function(){ window.close(); }">
 
 <div class="struk">
-    <!-- Kop Surat -->
     <div class="kop">
-        @if ($identitas->logo)
-            <img src="{{ Storage::disk('public')->url($identitas->logo) }}" alt="Logo Panti">
+        @if($identitas?->logo)
+            <img src="{{ public_path($identitas->logo) }}" alt="Logo Panti">
         @endif
-        <h1>{{ $identitas->nama_yayasan ?? 'YAYASAN' }}</h1>
-        <h2>{{ $identitas->nama_panti ?? 'PANTI ASUHAN' }}</h2>
-        <p>{{ $identitas->alamat ?? '-' }} • {{ $identitas->kota ?? '-' }} {{ $identitas->kode_pos ?? '' }}</p>
-        <p>Telp: {{ $identitas->telepon ?? '-' }} • Email: {{ $identitas->email ?? '-' }}</p>
-        @if($identitas->website)
-            <p>Website: {{ $identitas->website }}</p>
-        @endif
-        @if($identitas->npwp)
-            <p>NPWP: {{ $identitas->npwp }}</p>
-        @endif
-        @if($identitas->no_rekening)
-            <p>Rekening: {{ $identitas->no_rekening }} ({{ $identitas->nama_bank }})</p>
-        @endif
+        <h1>{{ $identitas->nama_panti ?? 'Panti Muhammadiyah Pesantunan' }}</h1>
+        <h2>{{ $identitas->alamat ?? '-' }}</h2>
+        <p>Telp: {{ $identitas->telepon ?? '-' }}</p>
     </div>
+    <div class="hr-kop"></div>
 
-    <hr class="hr-kop">
+    <div class="title">Bukti Penerimaan Donasi</div>
 
-    <div class="title">BUKTI DONASI</div>
-
-    <div class="terima">
-        <p>Telah terima sumbangan uang dari :</p>
-
-        <table>
-            <tr>
-                <td class="label">Kode Donatur</td>
-                <td>: {{ $donatur->kode_donatur }}</td>
-            </tr>
-            <tr>
-                <td class="label">Nama Donatur</td>
-                <td>: {{ $donatur->nama }}</td>
-            </tr>
-            <tr>
-                <td class="label">Jenis Donatur</td>
-                <td>: {{ $donatur->jenis_donatur ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="label">Kota</td>
-                <td>: {{ $donatur->kota ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="label">Pekerjaan</td>
-                <td>: {{ $donatur->pekerjaan ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="label">Tanggal Daftar</td>
-                <td>: {{ $donatur->tanggal_daftar_formatted }}</td>
-            </tr>
-            <tr>
-                <td class="label">Jumlah Donasi</td>
-                <td class="jumlah">{{ $donatur->total_donasi_rp }}</td>
-            </tr>
-            <tr>
-                <td class="terbilang">
-                    Terbilang: 
+    <table>
+        <tr>
+            <td class="label">No. Referensi</td>
+            <td>: {{ $donasi->kode_transaksi ?? 'KUMULATIF' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Tanggal</td>
+            <td>: {{ $donasi->tanggal?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y') }}</td>
+        </tr>
+        <tr>
+            <td class="label">Nama Donatur</td>
+            <td>: {{ $donatur->nama }}</td>
+        </tr>
+        <tr>
+            <td class="label">Alamat</td>
+            <td>: {{ $donatur->alamat ?? '-' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Telepon</td>
+            <td>: {{ $donatur->telepon ?? '-' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Jumlah Donasi</td>
+            <td class="jumlah">Rp {{ number_format($donasi->jumlah ?? 0, 0, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="terbilang">
+                <em>Terbilang: 
                     <?php
-                    // Ambil jumlah dari total_donasi yang sudah dihitung di controller
-                    $jumlah = (int) ($donatur->total_donasi ?? 0);
-
-                    // Panggil fungsi terbilang yang sudah Anda daftarkan di helper
+                    $jumlah = (int) ($donasi->jumlah ?? 0);
                     echo ucfirst(trim(terbilang($jumlah))) . ' Rupiah';
                     ?>
-                </td>
-            </tr>
-        </table>
-        <p style="margin-top: 15px;">Atas nama Pengurus Panti Muhammadiyah Pesantunan mengucapkan terima kasih.</p>
-        <p><strong>Jazaakallahu khairan jazaa.</strong></p>
-    </div>
+                </em>
+            </td>
+        </tr>
+    </table>
 
-    <!-- Tanggal -->
+    <p style="margin-top: 15px; font-size: 12px; text-align: center;">
+        Atas nama Pengurus Panti mengucapkan<br>
+        <strong>terima kasih banyak</strong> atas dukungan Bapak/Ibu.
+    </p>
+    <p style="font-weight: bold; text-align: center; margin: 15px 0;">
+        Jazaakumullahu khairan katsiira
+    </p>
+
     <div class="tanggal">
-        <p>Brebes, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+        Brebes, {{ now()->translatedFormat('d F Y') }}
     </div>
 
-    <!-- Tanda Tangan -->
     <div class="ttd">
         <div>
             <div class="jabatan">Pemimpin Panti</div>
             <div class="line"></div>
-            <div class="nama">{{ $identitas->pimpinan ?? '...................................' }}</div>
+            <div class="nama">{{ $identitas->pimpinan ?? '_________________' }}</div>
         </div>
-
         <div>
             <div class="jabatan">Donatur</div>
             <div class="line"></div>
@@ -195,16 +107,10 @@
     </div>
 
     <div class="footer">
-        <p>Terima kasih atas dukungan dan kebaikan hati Anda.</p>
-        <p>{{ \Carbon\Carbon::now()->translatedFormat('d F Y H:i') }} • Dicetak oleh Sistem Panti</p>
+        <p>Terima kasih atas kebaikan Anda ❤️</p>
+        <p>Dicetak: {{ now()->translatedFormat('d F Y H:i') }}</p>
     </div>
 </div>
-
-<script>
-    window.onload = function() {
-        window.print();
-    };
-</script>
 
 </body>
 </html>

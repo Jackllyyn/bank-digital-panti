@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PenerimaanDonasi;
 use App\Models\Pengeluaran;
-use App\Models\JurnalUmum;
 use App\Models\AnakPanti;
 use App\Models\Donatur;
 use App\Models\IdentitasPanti;
@@ -34,13 +33,23 @@ class DashboardController extends Controller
         // Surplus/Defisit Bulan Ini
         $surplusBulanIni = $donasiBulanIni - $pengeluaranBulanIni;
 
-        // Total Anak Aktif
+        // Total Anak Asuh Aktif
         $totalAnakAktif = AnakPanti::where('status', 'aktif')->count();
+
+        // === TAMBAHAN: Hitung jumlah anak berdasarkan jenis kelamin ===
+        $totalAnakLaki = AnakPanti::where('status', 'aktif')
+            ->where('jenis_kelamin', 'L')
+            ->count();
+
+        $totalAnakPerempuan = AnakPanti::where('status', 'aktif')
+            ->where('jenis_kelamin', 'P')
+            ->count();
+        // ============================================================
 
         // Total Donatur
         $totalDonatur = Donatur::count();
 
-        // Aktivitas Terakhir (5)
+        // Aktivitas Terakhir (5 terakhir)
         $aktivitasTerakhir = \Spatie\Activitylog\Models\Activity::with('causer')
             ->latest()
             ->take(5)
@@ -61,9 +70,16 @@ class DashboardController extends Controller
         });
 
         return view('admin.dashboard', compact(
-            'identitas', 'donasiBulanIni', 'pengeluaranBulanIni',
-            'surplusBulanIni', 'totalAnakAktif', 'totalDonatur',
-            'aktivitasTerakhir', 'grafik'
+            'identitas',
+            'donasiBulanIni',
+            'pengeluaranBulanIni',
+            'surplusBulanIni',
+            'totalAnakAktif',
+            'totalAnakLaki',         // ← Tambahan
+            'totalAnakPerempuan',   // ← Tambahan
+            'totalDonatur',
+            'aktivitasTerakhir',
+            'grafik'
         ));
     }
 }

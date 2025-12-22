@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Donatur;
+use App\Models\IdentitasPanti;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class DonaturController extends Controller
 {
@@ -15,32 +13,19 @@ class DonaturController extends Controller
     {
         $query = Donatur::query();
 
-        // Filter Jenis Donatur
-        if ($request->filled('jenis_donatur')) {
-            $query->where('jenis_donatur', 'like', '%' . $request->jenis_donatur . '%');
+        if ($request->filled('jenis')) {
+            $query->where('jenis_donatur', $request->jenis);
         }
 
-        // Filter Klasifikasi
-        if ($request->filled('klasifikasi')) {
-            $query->where('klasifikasi', $request->klasifikasi);
-        }
-
-        // Search Nama / Kode / Kota
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('kode_donatur', 'like', "%{$search}%")
-                    ->orWhere('nama', 'like', "%{$search}%")
-                    ->orWhere('kota', 'like', "%{$search}%");
+        if ($request->filled('cari')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->cari . '%')
+                    ->orWhere('kode_donatur', 'like', '%' . $request->cari . '%')
+                    ->orWhere('telepon', 'like', '%' . $request->cari . '%');
             });
         }
 
-        // Eager load relasi untuk total_donasi (hindari N+1)
-        $donaturs = $query->with('penerimaanDonasi')
-            ->orderBy('kode_donatur')
-            ->paginate(15);
-
-        $donaturs->appends($request->all());
+        $donaturs = $query->orderBy('kode_donatur')->paginate(15)->withQueryString();
 
         return view('admin.donatur.index', compact('donaturs'));
     }
@@ -52,145 +37,128 @@ class DonaturController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'jenis_donatur'    => 'nullable|string|max:50',
-            'nama'             => 'required|string|max:150',
-            'alamat_lengkap'   => 'nullable|string',
-            'kota'             => 'nullable|string|max:50',
-            'telepon'          => 'nullable|string|max:20',
-            'jenis_kelamin'    => 'nullable|in:L,P',
-            'pekerjaan'        => 'nullable|string|max:100',
-            'klasifikasi'      => 'nullable|in:tetap,tidak tetap',
-            'tanggal_daftar'   => 'required|date',
+        $request->validate([
+            'nama'           => 'required|string|max:100',
+            'jenis_donatur'  => 'required|in:perorangan,lembaga,perusahaan,lainnya',
+            'jenis_kelamin'  => 'nullable|in:L,P',
+            'alamat_lengkap' => 'nullable|string',
+            'kota'           => 'nullable|string|max:50',
+            'telepon'        => 'nullable|string|max:20',
+            'pekerjaan'      => 'nullable|string|max:50',
+            'klasifikasi'    => 'nullable|string|max:50',
+            'tanggal_daftar' => 'required|date',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        $last = Donatur::orderByDesc('kode_donatur')->first();
+        $next = $last ? (int) substr($last->kode_donatur, 3) + 1 : 1;
+        $kode = 'DON' . str_pad($next, 4, '0', STR_PAD_LEFT);
 
         $data = $request->all();
-
-        // Generate kode otomatis jika belum ada
-        if (empty($data['kode_donatur'])) {
-            $last = Donatur::orderBy('kode_donatur', 'desc')->first();
-            $next = $last ? (int)substr($last->kode_donatur, 1) + 1 : 1;
-            $data['kode_donatur'] = 'D' . str_pad($next, 3, '0', STR_PAD_LEFT);
-        }
+        $data['kode_donatur'] = $kode;
 
         Donatur::create($data);
 
         return redirect()->route('admin.donatur.index')
-            ->with('success', 'Donatur berhasil ditambahkan (Kode: ' . $data['kode_donatur'] . ')');
+            ->with('success', 'Donatur berhasil ditambahkan dengan kode ' . $kode);
     }
 
     public function edit($kode_donatur)
     {
-        $donatur = Donatur::findOrFail($kode_donatur);
+        $donatur = Donatur::where('kode_donatur', $kode_donatur)->firstOrFail();
         return view('admin.donatur.edit', compact('donatur'));
     }
 
     public function update(Request $request, $kode_donatur)
     {
-        $donatur = Donatur::findOrFail($kode_donatur);
+        $donatur = Donatur::where('kode_donatur', $kode_donatur)->firstOrFail();
 
-        $validator = Validator::make($request->all(), [
-            'jenis_donatur'    => 'nullable|string|max:50',
-            'nama'             => 'required|string|max:150',
-            'alamat_lengkap'   => 'nullable|string',
-            'kota'             => 'nullable|string|max:50',
-            'telepon'          => 'nullable|string|max:20',
-            'jenis_kelamin'    => 'nullable|in:L,P',
-            'pekerjaan'        => 'nullable|string|max:100',
-            'klasifikasi'      => 'nullable|in:tetap,tidak tetap',
-            'tanggal_daftar'   => 'required|date',
+        $request->validate([
+            'nama'           => 'required|string|max:100',
+            'jenis_donatur'  => 'required|in:perorangan,lembaga,perusahaan,lainnya',
+            'jenis_kelamin'  => 'nullable|in:L,P',
+            'alamat_lengkap' => 'nullable|string',
+            'kota'           => 'nullable|string|max:50',
+            'telepon'        => 'nullable|string|max:20',
+            'pekerjaan'      => 'nullable|string|max:50',
+            'klasifikasi'    => 'nullable|string|max:50',
+            'tanggal_daftar' => 'required|date',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $donatur->update($request->all());
 
         return redirect()->route('admin.donatur.index')
-            ->with('success', 'Donatur berhasil diperbarui.');
-    }
-    public function struk($kode_donatur)
-    {
-        $donatur = Donatur::findOrFail($kode_donatur);
-        $identitas = \App\Models\IdentitasPanti::getData();
-
-        return view('admin.donatur.struk', compact('donatur', 'identitas'));
+            ->with('success', 'Data donatur berhasil diperbarui');
     }
 
     public function destroy($kode_donatur)
     {
-        $donatur = Donatur::findOrFail($kode_donatur);
+        $donatur = Donatur::where('kode_donatur', $kode_donatur)->firstOrFail();
         $donatur->delete();
 
-        return redirect()->route('admin.donatur.index')
-            ->with('success', 'Donatur berhasil dihapus (soft delete).');
+        return response()->json(['success' => true]);
     }
 
     public function trash()
     {
-        $donaturs = Donatur::onlyTrashed()->orderBy('kode_donatur')->paginate(10);
+        $donaturs = Donatur::onlyTrashed()->orderBy('kode_donatur')->paginate(15);
         return view('admin.donatur.trash', compact('donaturs'));
     }
 
     public function restore($kode_donatur)
     {
-        $donatur = Donatur::withTrashed()->findOrFail($kode_donatur);
+        $donatur = Donatur::onlyTrashed()->where('kode_donatur', $kode_donatur)->firstOrFail();
         $donatur->restore();
 
-        return redirect()->route('admin.donatur.trash')
-            ->with('success', 'Donatur berhasil direstore.');
+        return back()->with('success', 'Donatur berhasil dipulihkan');
     }
 
     public function forceDelete($kode_donatur)
     {
-        $donatur = Donatur::withTrashed()->findOrFail($kode_donatur);
+        $donatur = Donatur::onlyTrashed()->where('kode_donatur', $kode_donatur)->firstOrFail();
         $donatur->forceDelete();
 
-        return redirect()->route('admin.donatur.trash')
-            ->with('success', 'Donatur berhasil dihapus permanen.');
+        return back()->with('success', 'Donatur berhasil dihapus permanen');
     }
 
-    public function forceDeleteAll(Request $request)
+    public function forceDeleteAll()
     {
-        $request->validate([
-            'confirmation' => 'required|in:YA',
-        ], [
-            'confirmation.in' => 'Harap ketik "YA" untuk konfirmasi penghapusan permanen.',
-        ]);
-
-        // Hapus permanen semua data di trash
         Donatur::onlyTrashed()->forceDelete();
+        return back()->with('success', 'Semua donatur di sampah berhasil dihapus permanen');
+    }
 
-        return redirect()->route('admin.donatur.trash')
-            ->with('success', 'Semua donatur di trash berhasil dihapus permanen!');
+    public function truncate(Request $request)
+    {
+        $request->validate(['confirmation' => 'required|in:YA']);
+        Donatur::truncate();
+        return redirect()->route('admin.donatur.index')->with('success', 'Semua data donatur berhasil dihapus permanen');
     }
 
     /**
-     * Hapus semua data donatur (truncate) dengan aman meski ada foreign key
+     * Cetak struk kumulatif total donasi seorang donatur
      */
-    public function truncate(Request $request)
+    /**
+     * Cetak struk kumulatif total donasi seorang donatur
+     */
+    public function struk($kode_donatur)
     {
-        $request->validate([
-            'confirmation' => 'required|in:YA',
-        ], [
-            'confirmation.in' => 'Harap ketik "YA" untuk konfirmasi penghapusan permanen.',
+        $donatur = Donatur::with(['penerimaanDonasi' => function ($query) {
+            $query->latest();
+        }])->where('kode_donatur', $kode_donatur)->firstOrFail();
+
+        // Total donasi kumulatif
+        $totalDonasi = $donatur->penerimaanDonasi->sum('jumlah');
+
+        $identitas = IdentitasPanti::first();
+
+        // View yang benar: admin.donatur.struk
+        return view('admin.donatur.struk', [
+            'donatur'    => $donatur,
+            'donasi'     => (object)[
+                'kode_transaksi' => 'KUMULATIF-' . $donatur->kode_donatur,
+                'tanggal'        => $donatur->penerimaanDonasi->first()?->tanggal ?? now(),
+                'jumlah'         => $totalDonasi,
+            ],
+            'identitas'  => $identitas,
         ]);
-
-        // Nonaktifkan pengecekan foreign key sementara
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Hapus semua data dari tabel donatur + reset auto increment
-        Donatur::truncate();
-
-        // Aktifkan kembali pengecekan foreign key
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-        return redirect()->route('admin.donatur.index')
-            ->with('success', 'Semua data donatur berhasil dihapus permanen!');
     }
 }
