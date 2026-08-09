@@ -17,9 +17,14 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Donatur</label>
-                    <input type="text" name="jenis_donatur" value="{{ old('jenis_donatur', $donatur->jenis_donatur) }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Donatur <span class="text-red-500">*</span></label>
+                    <select name="jenis_donatur" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="">Pilih jenis</option>
+                        <option value="individu" {{ old('jenis_donatur', $donatur->jenis_donatur) == 'individu' ? 'selected' : '' }}>Individu</option>
+                        <option value="organisasi" {{ old('jenis_donatur', $donatur->jenis_donatur) == 'organisasi' ? 'selected' : '' }}>Organisasi</option>
+                        <option value="kelompok" {{ old('jenis_donatur', $donatur->jenis_donatur) == 'kelompok' ? 'selected' : '' }}>Kelompok</option>
+                    </select>
                     @error('jenis_donatur') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
@@ -30,6 +35,7 @@
                     @error('nama') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                <!-- sisanya sama seperti sebelumnya -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap</label>
                     <textarea name="alamat_lengkap" rows="2"
@@ -37,7 +43,6 @@
                     @error('alamat_lengkap') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Kolom lainnya sama seperti create, hanya ganti nilai default -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kota</label>
                     <input type="text" name="kota" value="{{ old('kota', $donatur->kota) }}"

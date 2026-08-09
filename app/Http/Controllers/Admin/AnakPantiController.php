@@ -34,7 +34,7 @@ class AnakPantiController extends Controller
             $query->whereBetween('tanggal_masuk', [$request->dari, $request->sampai]);
         }
 
-        $anak = $query->orderBy('niap')->paginate(15);
+        $anak = $query->orderBy('niap')->paginate(50);
         $anak->appends($request->query());
 
         return view('admin.anak-panti.index', compact('anak'));
@@ -91,10 +91,6 @@ class AnakPantiController extends Controller
 
         $data = $request->all();
 
-        if ($request->niap !== $anak->niap) {
-            $anak->niap = $request->niap;
-        }
-
         if ($request->hasFile('foto')) {
             if ($anak->foto) \Storage::disk('public')->delete($anak->foto);
             $data['foto'] = $request->file('foto')->store('anak-panti', 'public');
@@ -137,7 +133,7 @@ class AnakPantiController extends Controller
         ]);
 
         try {
-            Excel::import(new \App\Imports\AnakPantiImport, $request->file('file'));
+            Excel::import(new AnakPantiImport, $request->file('file'));
 
             return redirect()->route('admin.anak-panti.index')
                 ->with('success', 'Data anak panti berhasil diimport!');

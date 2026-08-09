@@ -100,7 +100,7 @@ class ImportController extends Controller
                 'nama_ibu', 'tingkat_pendidikan', 'nama_sekolah'
             ];
             $exampleData = [
-                ['A001', 'Ahmad Zaki', 'L', 'Bandung', 'Bandung', '2015-05-20', '2024-06-01', 'Yatim', 'Budi', 'Siti', 'SD', 'SD Negeri 1']
+                ['A001', 'Ahmad Zaki', 'L', 'Bandung', 'Bandung', '2015-05-20', '2024-06-01', 'aktif', 'Budi', 'Siti', 'SD', 'SD Negeri 1']
             ];
             break;
 

@@ -1,7 +1,7 @@
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
-$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['href', 'active' => false]));
+$__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames((['active' => false]));
 
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
@@ -16,7 +16,7 @@ $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 unset($__propNames);
 unset($__newAttributes);
 
-foreach (array_filter((['href', 'active' => false]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+foreach (array_filter((['active' => false]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
 
@@ -28,8 +28,19 @@ foreach ($attributes->all() as $__key => $__value) {
 
 unset($__defined_vars, $__key, $__value); ?>
 
-<a href="<?php echo e($href); ?>" 
-   class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition rounded-md <?php echo e($active ? 'bg-blue-100 text-blue-600 font-medium' : ''); ?>">
-    <?php echo $slot; ?>
+<?php
+    $baseClasses = 'flex items-center gap-4 px-4 py-3 rounded-xl transition duration-200 font-medium group w-full text-left';
+    
+    // State Aktif: Background hijau muda, teks hijau tua, icon hijau
+    $activeClasses = 'bg-emerald-50 text-emerald-700 [&_.menu-icon]:text-emerald-600 shadow-sm ring-1 ring-emerald-100';
+    
+    // State Tidak Aktif: Teks abu-abu, hover background abu-abu muda
+    $inactiveClasses = 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 [&_.menu-icon]:group-hover:text-gray-800';
+    
+    $classes = $baseClasses . ' ' . ($active ? $activeClasses : $inactiveClasses);
+?>
+
+<a <?php echo e($attributes->merge(['class' => $classes])); ?>>
+    <?php echo e($slot); ?>
 
 </a><?php /**PATH C:\xampp\htdocs\web-panti\resources\views/components/sidebar-link.blade.php ENDPATH**/ ?>

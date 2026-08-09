@@ -5,37 +5,37 @@
     <div class="max-w-4xl mx-auto py-6">
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
 
-            <!-- Header + Tombol Export -->
-            <div
-                class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-gray-200 flex justify-between items-center">
-                <div>
-                    <h1 class="text-lg font-bold text-gray-800">Saldo Awal Tahun {{ $tahun }}</h1>
-                    <p class="text-xs text-gray-600 mt-1">Pilih kelompok akun untuk mengatur saldo awal</p>
-                </div>
+           <div class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-gray-200 flex justify-between items-center">
+    <div>
+        <h1 class="text-lg font-bold text-gray-800">Saldo Awal Tahun {{ $tahun }}</h1>
+        <p class="text-xs text-gray-600 mt-1">Pilih kelompok akun untuk mengatur saldo awal</p>
+    </div>
 
-                <div class="flex gap-3">
-                    <a href="{{ route('admin.saldo-awal.export-all') }}"
-                        class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-file-excel mr-2"></i> Export Semua
-                    </a>
+    <div class="flex gap-3">
+        <!-- Export Semua (Excel) -->
+        <a href="{{ route('admin.saldo-awal.export.all') }}"
+           class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
+            <i class="fas fa-file-excel mr-2"></i> Export Semua
+        </a>
 
-                    <a href="{{ route('admin.saldo-awal.export-pdf') }}"
-                        class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition"
-                        target="_blank">
-                        <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
-                    </a>
-                    <form action="{{ route('admin.saldo-awal.export-kelompok') }}" method="POST" id="form-export"
-                        class="hidden">
-                        @csrf
-                        <input type="hidden" name="kelompok" id="export-kelompok-value">
-                        <button type="submit"
-                            class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition">
-                            <i class="fas fa-download mr-2"></i> Export Kelompok Ini
-                        </button>
-                        <!-- Di dalam div flex gap-3 bersama tombol export excel -->
-                    </form>
-                </div>
-            </div>
+        <!-- Cetak PDF -->
+        {{-- <a href="{{ route('admin.saldo-awal.pdf') }}"
+           class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition"
+           target="_blank">
+            <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+        </a> --}}
+
+        <!-- Export Kelompok (form tetap sama, hanya route name yang benar) -->
+        <form action="{{ route('admin.saldo-awal.export.kelompok') }}" method="POST" id="form-export" class="hidden">
+            @csrf
+            <input type="hidden" name="kelompok" id="export-kelompok-value">
+            <button type="submit"
+                    class="inline-flex items-center px-4 py-2 text-xs font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition">
+                <i class="fas fa-download mr-2"></i> Export Kelompok Ini
+            </button>
+        </form>
+    </div>
+</div>
 
             <div class="p-6">
                 <form action="{{ route('admin.saldo-awal.store') }}" method="POST">

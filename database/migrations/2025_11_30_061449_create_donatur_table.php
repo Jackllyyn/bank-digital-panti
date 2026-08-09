@@ -12,6 +12,7 @@ return new class extends Migration
             $table->string('kode_donatur', 20)->primary();
             $table->string('jenis_donatur', 50)->nullable();
             $table->string('nama', 150);
+            $table->decimal('total_donasi', 15, 2)->default(0);
             $table->text('alamat_lengkap')->nullable();
             $table->string('kota', 50)->nullable();
             $table->string('telepon', 20)->nullable();

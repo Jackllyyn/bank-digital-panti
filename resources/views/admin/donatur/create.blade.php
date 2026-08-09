@@ -10,11 +10,15 @@
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Kolom 1 -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Donatur</label>
-                    <input type="text" name="jenis_donatur" value="{{ old('jenis_donatur') }}"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Donatur <span class="text-red-500">*</span></label>
+                    <select name="jenis_donatur" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="">Pilih jenis</option>
+                        <option value="individu" {{ old('jenis_donatur') == 'individu' ? 'selected' : '' }}>Individu</option>
+                        <option value="kelompok" {{ old('jenis_donatur') == 'kelompok' ? 'selected' : '' }}>Kelompok</option>
+                        <option value="organisasi" {{ old('jenis_donatur') == 'organisasi' ? 'selected' : '' }}>Organisasi</option>
+                    </select>
                     @error('jenis_donatur') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
@@ -25,10 +29,10 @@
                     @error('nama') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
+                <!-- sisanya sama seperti sebelumnya -->
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap</label>
-                    <textarea name="alamat_lengkap" rows="2"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">{{ old('alamat_lengkap') }}</textarea>
+                    <textarea name="alamat_lengkap" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">{{ old('alamat_lengkap') }}</textarea>
                     @error('alamat_lengkap') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 

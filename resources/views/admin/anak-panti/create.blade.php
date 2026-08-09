@@ -99,9 +99,9 @@
             <div class="col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status Anak</label>
                 <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-3">
-                    <option value="aktif" {{ old('status', 'aktif') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="aktif" {{ old('status', 'aktif') == 'aktif' ? 'selected' : '' }}>Dalam Panti</option>
                     <option value="keluar">Keluar</option>
-                    <option value="adopsi">Adopsi</option>
+                    <option value="adopsi">Non Panti</option>
                 </select>
             </div>
         </div>

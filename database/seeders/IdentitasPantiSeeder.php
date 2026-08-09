@@ -10,14 +10,14 @@ class IdentitasPantiSeeder extends Seeder
     public function run(): void
     {
         IdentitasPanti::updateOrCreate(
-            ['nama_panti' => 'Panti Muhammadiyah Pesantunan'], // unik
+            ['nama_panti' => 'PIMPINAN RANTING MUHAMMADIYAH PESANTUNAN'], // unik
             [
                 'nama_yayasan'   => 'Yayasan Kasih Anak Yatim',
-                'nama_panti'     => 'Panti Muhammadiyah Pesantunan',
-                'alamat'         => 'Jl. Brebes No. 123, Brebes',
+                'nama_panti'     => 'LKSA PANTI ASUHAN MUHAMMADIYAH',
+                'alamat'         => 'Jl.n. Teuku Cik Ditiro RT.01 / Rw. 08 Pesantunan - Wanasari - Brebes Brebes',
                 'kota'           => 'Brebes',
-                'kode_pos'       => '52211',
-                'telepon'        => '0283-1234567',
+                'kode_pos'       => '52212',
+                'telepon'        => '081542054789',
                 'email'          => 'info@muhammadiyah-pesantunan.or.id',
                 'website'        => 'https://muhammadiyah-pesantunan.or.id',
                 'pimpinan'       => 'H. Ahmad Subakhi, S.Ag',

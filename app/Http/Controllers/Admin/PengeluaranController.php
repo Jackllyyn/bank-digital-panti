@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pengeluaran;
 use App\Models\JurnalUmum;
 use App\Models\DaftarAkun;
+use App\Models\SaldoAwal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,15 +51,35 @@ class PengeluaranController extends Controller
             'no_bukti'    => 'nullable|string|max:50',
         ]);
 
-        DB::transaction(function () use ($request) {
+        // Tentukan Akun Kredit (Sumber Dana: Kas)
+        $akunKas = DaftarAkun::where('nama_akun', 'like', '%Kas%')
+            ->where('nama_akun', 'not like', '%Kecil%')
+            ->orderBy('kode_akun')
+            ->first();
+        $kodeKredit = $akunKas ? $akunKas->kode_akun : '1001';
+
+        // Validasi Saldo Kas
+        $tahun = date('Y', strtotime($request->tanggal));
+        $saldoAwal = SaldoAwal::where('kode_akun', $kodeKredit)->where('tahun', $tahun)->value('saldo') ?? 0;
+        $debit     = JurnalUmum::where('kode_akun_debet', $kodeKredit)->whereYear('tanggal', $tahun)->sum('jumlah');
+        $kredit    = JurnalUmum::where('kode_akun_kredit', $kodeKredit)->whereYear('tanggal', $tahun)->sum('jumlah');
+        $saldoTersedia = $saldoAwal + $debit - $kredit;
+
+        if ($request->jumlah > $saldoTersedia) {
+            return back()->withInput()->withErrors(['jumlah' => 'Saldo Kas tidak mencukupi! Saldo saat ini: Rp ' . number_format($saldoTersedia, 0, ',', '.')]);
+        }
+
+        DB::transaction(function () use ($request, $kodeKredit) {
             $pengeluaran = Pengeluaran::create($request->all() + ['user_id' => auth()->id()]);
+            
+            $noTransaksi = 'OUT' . date('Ymd') . str_pad($pengeluaran->id, 5, '0', STR_PAD_LEFT);
 
             JurnalUmum::create([
                 'tanggal'          => $request->tanggal,
-                'no_transaksi'     => 'OUT' . date('Ymd') . str_pad($pengeluaran->id, 5, '0', STR_PAD_LEFT),
+                'no_transaksi'     => $noTransaksi,
                 'uraian'           => 'Pengeluaran: ' . $request->keterangan,
                 'kode_akun_debet'  => $request->kode_akun,  // Beban
-                'kode_akun_kredit' => '101',                // Kas
+                'kode_akun_kredit' => $kodeKredit,          // Kas
                 'jumlah'           => $request->jumlah,
                 'user_id'          => auth()->id(),
             ]);

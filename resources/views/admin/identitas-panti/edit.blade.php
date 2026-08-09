@@ -30,7 +30,7 @@
     <form action="{{ route('admin.identitas-panti.update') }}" method="POST" enctype="multipart/form-data"
           class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         @csrf
-        @method('PATCH')
+        @method('PUT')
 
         <div class="p-6 space-y-8">
 

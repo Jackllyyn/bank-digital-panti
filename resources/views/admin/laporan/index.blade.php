@@ -7,18 +7,34 @@
         <!-- Header -->
         <div class="px-6 py-4 bg-green-600 text-white flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             <div>
-                <h1 class="text-lg font-semibold">Laporan Keuangan Tahun {{ $tahun }}</h1>
+                <h1 class="text-lg font-semibold">Laporan Keuangan</h1>
                 <p class="text-green-100 text-xs mt-1">Neraca & Laba Rugi — Otomatis dari jurnal & saldo awal</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('admin.laporan.excel') }}"
+                <form method="GET" action="{{ route('admin.laporan.index') }}" class="flex items-center gap-2 bg-white/10 p-1 rounded-lg">
+                    <input type="date" name="tgl_awal" value="{{ $tglAwal }}" class="text-gray-800 text-xs rounded border-0 py-1 px-2 focus:ring-1 focus:ring-green-300">
+                    <span class="text-xs">s/d</span>
+                    <input type="date" name="tgl_akhir" value="{{ $tglAkhir }}" class="text-gray-800 text-xs rounded border-0 py-1 px-2 focus:ring-1 focus:ring-green-300">
+                    <button type="submit" class="bg-green-800 hover:bg-green-900 text-white text-xs px-3 py-1 rounded transition">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="flex gap-2">
+                <a href="{{ route('admin.laporan.excel', request()->query()) }}"
                    class="px-4 py-1.5 bg-white text-green-700 rounded-lg hover:bg-green-100 transition text-xs font-medium flex items-center gap-1">
                     <i class="fas fa-file-excel"></i> Excel
                 </a>
-                <a href="{{ route('admin.laporan.pdf') }}"
+                <a href="{{ route('admin.laporan.pdf', request()->query()) }}"
+                   target="_blank"
                    class="px-4 py-1.5 bg-white text-red-700 rounded-lg hover:bg-red-100 transition text-xs font-medium flex items-center gap-1">
                     <i class="fas fa-file-pdf"></i> PDF
                 </a>
+                <a href="{{ route('admin.laporan.neraca-saldo-penutupan') }}"
+                   class="px-4 py-1.5 bg-white text-gray-700 rounded-lg hover:bg-gray-100 transition text-xs font-medium flex items-center gap-1">
+                    <i class="fas fa-book"></i> Neraca Setelah Penutupan
+                </a>
+                
             </div>
         </div>
 
@@ -96,7 +112,7 @@
                 <table class="w-full text-xs">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th colspan="2" class="px-4 py-2 text-left text-sm font-semibold text-gray-800">LAPORAN LABA RUGI</th>
+                            <th colspan="2" class="px-4 py-2 text-left text-sm font-semibold text-gray-800">LAPORAN AKTIVITAS RUGI LABA</th>
                         </tr>
                         <tr class="bg-gray-100">
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">Keterangan</th>
@@ -145,6 +161,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <p class="text-green-100 text-xs mt-1">Neraca & Laba Rugi — Otomatis dari jurnal & saldo awal</p>
+            </div>
             </div>
         </div>
     </div>
