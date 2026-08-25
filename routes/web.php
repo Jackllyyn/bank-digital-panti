@@ -25,14 +25,23 @@ use App\Http\Controllers\Admin\PersediaanKeluarController;
 use App\Http\Controllers\Admin\DonasiBarangController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\KasKecilController;
-use App\Http\Controllers\Admin\TutupBukuController; // Tambahkan ini
-use App\Http\Controllers\Admin\BukuBesarController; // Tambahkan ini
-use App\Http\Controllers\Admin\ArusKasController;   // Tambahkan ini
-use App\Http\Controllers\Admin\PenyusutanController; // Tambahkan ini
+use App\Http\Controllers\Admin\TutupBukuController;
+use App\Http\Controllers\Admin\BukuBesarController;
+use App\Http\Controllers\Admin\ArusKasController;
+use App\Http\Controllers\Admin\PenyusutanController;
+use App\Http\Controllers\PublicController;
 
 // Controllers khusus staff
 use App\Http\Controllers\Staff\PenerimaanDonasiController as StaffPenerimaanDonasiController;
 use App\Http\Controllers\Staff\PengeluaranController as StaffPengeluaranController;
+
+// ==================== PUBLIC ROUTES ====================
+Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery');
+Route::get('/news', [PublicController::class, 'news'])->name('news');
+Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+Route::get('/donation', [PublicController::class, 'donation'])->name('donation');
 
 // ====================== DASHBOARD REDIRECT ======================
 Route::get('/dashboard', function () {
@@ -58,7 +67,7 @@ Route::prefix('admin')
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Import Routes (semua di dalam group admin)
+        // Import Routes
         Route::prefix('import')->group(function () {
             Route::get('/', [ImportController::class, 'index'])->name('import.index');
             
@@ -68,7 +77,6 @@ Route::prefix('admin')
             Route::post('aset-tetap', [ImportController::class, 'asetTetap'])->name('import.aset-tetap');
         });
 
-        // Download Template (tetap di luar prefix import agar lebih fleksibel)
         Route::get('/import/template/{type}', [ImportController::class, 'downloadTemplate'])
             ->name('import.template');
 
@@ -92,7 +100,7 @@ Route::prefix('admin')
         Route::get('donatur/{kode_donatur}/print', [DonaturController::class, 'print'])->name('donatur.print');
         Route::get('donatur/{kode_donatur}/pdf', [DonaturController::class, 'exportPdfDetail'])->name('donatur.pdf');
 
-        // Karyawan - Lengkap
+        // Karyawan
         Route::resource('karyawan', KaryawanController::class)->except(['show']);
         Route::get('karyawan/trash', [KaryawanController::class, 'trash'])->name('karyawan.trash');
         Route::patch('karyawan/restore/{nip}', [KaryawanController::class, 'restore'])->name('karyawan.restore');
@@ -108,7 +116,7 @@ Route::prefix('admin')
         Route::post('anak-panti/import', [AnakPantiController::class, 'import'])->name('anak-panti.import');
         Route::post('anak-panti/truncate', [AnakPantiController::class, 'truncate'])->name('anak-panti.truncate');
 
-        // Penerimaan Donasi - Admin full access
+        // Penerimaan Donasi
         Route::resource('penerimaan-donasi', PenerimaanDonasiController::class)->except(['show']);
         Route::get('penerimaan-donasi/{id}/struk', [PenerimaanDonasiController::class, 'struk'])->name('penerimaan-donasi.struk');
         Route::get('penerimaan-donasi/export/pdf', [PenerimaanDonasiController::class, 'exportPdf'])->name('penerimaan-donasi.export.pdf');
@@ -121,10 +129,9 @@ Route::prefix('admin')
         Route::get('pengeluaran/export/excel/per-akun/{kode_akun}', [PengeluaranController::class, 'exportExcelPerAkun'])->name('pengeluaran.export.excel.per-akun');
         Route::get('pengeluaran/export/pdf/per-akun/{kode_akun}', [PengeluaranController::class, 'exportPdfPerAkun'])->name('pengeluaran.export.pdf.per-akun');
 
-
         // Jurnal Umum
         Route::resource('jurnal-umum', JurnalUmumController::class)->except(['show']);
-        Route::get('jurnal-umum/export/pdf',   [JurnalUmumController::class, 'exportPdf'])->name('jurnal-umum.export.pdf');
+        Route::get('jurnal-umum/export/pdf', [JurnalUmumController::class, 'exportPdf'])->name('jurnal-umum.export.pdf');
         Route::get('jurnal-umum/export/excel', [JurnalUmumController::class, 'exportExcel'])->name('jurnal-umum.export.excel');
 
         // Daftar Akun & Saldo Awal
@@ -140,9 +147,8 @@ Route::prefix('admin')
         Route::get('persediaan-keluar/{id}/print', [PersediaanKeluarController::class, 'print'])->name('persediaan-keluar.print');
         Route::resource('penjualan-pemakaian-barang', PersediaanKeluarController::class)->except(['show']);
 
-        // Aset Tetap & Iventaris
+        // Aset Tetap & Inventaris
         Route::resource('aset-tetap', AsetTetapController::class)->except(['show']);
-        // Penyusutan Aset Tetap
         Route::get('penyusutan', [PenyusutanController::class, 'index'])->name('penyusutan.index');
         Route::post('penyusutan', [PenyusutanController::class, 'store'])->name('penyusutan.store');
         Route::resource('inventaris', InventarisController::class)->except(['show']);
@@ -178,14 +184,14 @@ Route::prefix('admin')
         Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::resource('staff', StaffController::class)->except(['show']);
 
-        //Kas Besar
+        // Kas Besar
         Route::get('kas-besar/export/excel', [App\Http\Controllers\Admin\KasBesarController::class, 'exportExcel'])->name('kas-besar.export.excel');
         Route::resource('kas-besar', App\Http\Controllers\Admin\KasBesarController::class)->except(['show']);
         Route::post('kas-besar', [App\Http\Controllers\Admin\KasBesarController::class, 'destroy'])->name('admin.kas-besar.destroy');
         Route::post('kas-besar', [App\Http\Controllers\Admin\KasBesarController::class, 'store'])->name('admin.kas-besar.store');
         Route::get('kas-besar/{id}/print', [App\Http\Controllers\Admin\KasBesarController::class, 'struk'])->name('kas-besar.print');
 
-        //Kas Kecil
+        // Kas Kecil
         Route::resource('kas-kecil', KasKecilController::class)->except(['show']);
         Route::get('kas-kecil/export/excel', [KasKecilController::class, 'exportExcel'])->name('kas-kecil.export.excel');
         Route::post('kas-kecil', [KasKecilController::class, 'destroy'])->name('admin.kas-kecil.destroy');
@@ -206,7 +212,6 @@ Route::prefix('staff')
 
         Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
 
-        // Penerimaan Donasi - Staff hanya create & store + cetak struk
         Route::get('penerimaan-donasi/create', [StaffPenerimaanDonasiController::class, 'create'])
             ->name('penerimaan-donasi.create');
         Route::post('penerimaan-donasi', [StaffPenerimaanDonasiController::class, 'store'])
@@ -214,13 +219,11 @@ Route::prefix('staff')
         Route::get('penerimaan-donasi/{id}/struk', [PenerimaanDonasiController::class, 'struk'])
             ->name('penerimaan-donasi.struk');
 
-        // Pengeluaran - Staff hanya create & store
         Route::get('pengeluaran/create', [StaffPengeluaranController::class, 'create'])
             ->name('pengeluaran.create');
         Route::post('pengeluaran', [StaffPengeluaranController::class, 'store'])
             ->name('pengeluaran.store');
 
-        // Jurnal Umum (read-only untuk staff)
         Route::get('jurnal-umum', [JurnalUmumController::class, 'index'])
             ->name('jurnal-umum.index');
     });
@@ -228,7 +231,3 @@ Route::prefix('staff')
 // ====================== AUTHENTICATION ROUTES ======================
 require __DIR__ . '/auth.php';
 
-// ====================== WELCOME / LANDING PAGE ======================
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');

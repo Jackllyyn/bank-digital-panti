@@ -1,19 +1,17 @@
-
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Models;
 
-use App\Http\Controllers\Controller;
-use App\Models\LogAktivitas;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AuditLogController extends Controller
+class LogAktivitas extends Model
 {
-    public function index()
-    {
-        $logs = LogAktivitas::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate(25);
+    protected $table = 'log_aktivitas'; 
+    protected $fillable = ['user_id', 'aktivitas', 'keterangan']; 
 
-        return view('admin.audit-log.index', compact('logs'));
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
