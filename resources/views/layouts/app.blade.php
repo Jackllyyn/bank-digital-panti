@@ -23,18 +23,15 @@
             flex-shrink: 0;
         }
 
-        /* Sidebar transition */
         .sidebar-transition {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Prevent text overflow */
         .sidebar-content {
             overflow: hidden;
             white-space: nowrap;
         }
 
-        /* Scrollbar styling */
         .sidebar-scroll::-webkit-scrollbar {
             width: 4px;
         }
@@ -49,8 +46,6 @@
             background: #9ca3af;
         }
 
-        /* ===== MENU STYLING ===== */
-        /* Group Header - with icon */
         .menu-group-header {
             display: flex;
             align-items: center;
@@ -79,7 +74,6 @@
             margin-left: 0.25rem;
         }
 
-        /* Menu Item Base */
         .menu-item {
             display: flex;
             align-items: center;
@@ -146,7 +140,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Dropdown Toggle */
         .menu-dropdown-toggle {
             display: flex;
             align-items: center;
@@ -199,7 +192,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Dropdown Children */
         .menu-dropdown-children {
             margin-left: 0.5rem;
             padding-left: 0.75rem;
@@ -217,13 +209,11 @@
             width: 1.5rem;
         }
 
-        /* Divider */
         .menu-divider {
             border-top: 1px solid #e5e7eb;
             margin: 0.5rem 1rem;
         }
 
-        /* Logout Button */
         .menu-logout {
             display: flex;
             align-items: center;
@@ -264,7 +254,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Dropdown arrow rotation */
         .dropdown-arrow {
             transition: transform 0.3s ease;
             font-size: 0.75rem;
@@ -276,7 +265,6 @@
             transform: rotate(180deg);
         }
 
-        /* ===== RESPONSIVE FIX ===== */
         @media (max-width: 767px) {
             .menu-item, .menu-dropdown-toggle, .menu-logout {
                 font-size: 0.95rem;
@@ -321,7 +309,6 @@
                             Keuangan Panti
                         </h1>
                     </div>
-                    {{-- Tombol close untuk mobile --}}
                     <button @click="toggleSidebar()" 
                             class="md:hidden text-white hover:text-gray-200 focus:outline-none p-1 rounded-lg hover:bg-white/10 transition-colors">
                         <i class="fas fa-times text-xl"></i>
@@ -332,7 +319,7 @@
                 <div class="p-5 bg-gradient-to-b from-gray-50 to-white border-b border-gray-200 flex-shrink-0">
                     <div class="flex items-center gap-3">
                         <div class="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0 shadow-md">
-                            {{ substr(auth()->user()->name, 0, 1) }}
+                            {{ auth()->user() ? substr(auth()->user()->name, 0, 1) : '?' }}
                         </div>
                         <div class="overflow-hidden" 
                              x-show="sidebarOpen" 
@@ -340,11 +327,11 @@
                              x-transition:leave.opacity.duration.100ms>
                             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Selamat datang</p>
                             <p class="text-sm font-semibold text-gray-800 truncate" 
-                               title="{{ auth()->user()->name }}">
-                                {{ auth()->user()->name }}
+                               title="{{ auth()->user() ? auth()->user()->name : '' }}">
+                                {{ auth()->user() ? auth()->user()->name : '' }}
                             </p>
                             <span class="inline-block mt-1 px-2.5 py-0.5 text-xs font-medium text-emerald-700 bg-emerald-100 rounded-full">
-                                {{ ucfirst(auth()->user()->role) }}
+                                {{ auth()->user() ? ucfirst(auth()->user()->role) : '' }}
                             </span>
                         </div>
                     </div>
@@ -354,7 +341,7 @@
                 <nav class="flex-1 px-2 py-3 overflow-y-auto sidebar-scroll" 
                      @click="if($event.target.closest('a') && isMobile) sidebarOpen = false">
                     
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user() && auth()->user()->role === 'admin')
                         {{-- ===== MENU ADMIN ===== --}}
                         
                         {{-- GROUP 1: Utama --}}
@@ -375,6 +362,108 @@
                                 Dashboard
                             </span>
                         </a>
+
+                        {{-- ==================== PENGURUS ==================== --}}
+                        @php
+                            $isPengurusActive = request()->is('admin/pengurus*');
+                        @endphp
+                        <div x-data="{ open: {{ $isPengurusActive ? 'true' : 'false' }} }">
+                            <button @click="open = !open" 
+                                    class="menu-dropdown-toggle {{ $isPengurusActive ? 'active' : '' }}">
+                                <i class="fas fa-users menu-icon"></i>
+                                <span class="menu-text" 
+                                      x-show="sidebarOpen"
+                                      x-transition:enter.opacity.duration.300ms.delay.100ms 
+                                      x-transition:leave.opacity.duration.100ms>
+                                    Pengurus
+                                </span>
+                                <i class="fas fa-chevron-down dropdown-arrow" 
+                                   :class="open ? 'open' : ''"
+                                   x-show="sidebarOpen"></i>
+                            </button>
+                            <div x-show="open && sidebarOpen" 
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="menu-dropdown-children">
+                                <a href="{{ route('admin.pengurus.index') }}" class="menu-item {{ request()->routeIs('admin.pengurus.index') ? 'active' : '' }}">
+                                    <i class="fas fa-list menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Daftar Pengurus</span>
+                                </a>
+                                <a href="{{ route('admin.pengurus.create') }}" class="menu-item {{ request()->routeIs('admin.pengurus.create') ? 'active' : '' }}">
+                                    <i class="fas fa-plus-circle menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Tambah Pengurus</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- ==================== GALERI ==================== --}}
+                        @php
+                            $isGaleriActive = request()->is('admin/galeri*');
+                        @endphp
+                        <div x-data="{ open: {{ $isGaleriActive ? 'true' : 'false' }} }">
+                            <button @click="open = !open" 
+                                    class="menu-dropdown-toggle {{ $isGaleriActive ? 'active' : '' }}">
+                                <i class="fas fa-images menu-icon"></i>
+                                <span class="menu-text" 
+                                      x-show="sidebarOpen"
+                                      x-transition:enter.opacity.duration.300ms.delay.100ms 
+                                      x-transition:leave.opacity.duration.100ms>
+                                    Galeri
+                                </span>
+                                <i class="fas fa-chevron-down dropdown-arrow" 
+                                   :class="open ? 'open' : ''"
+                                   x-show="sidebarOpen"></i>
+                            </button>
+                            <div x-show="open && sidebarOpen" 
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="menu-dropdown-children">
+                                <a href="{{ route('admin.galeri.index') }}" class="menu-item {{ request()->routeIs('admin.galeri.index') ? 'active' : '' }}">
+                                    <i class="fas fa-list menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Daftar Galeri</span>
+                                </a>
+                                <a href="{{ route('admin.galeri.create') }}" class="menu-item {{ request()->routeIs('admin.galeri.create') ? 'active' : '' }}">
+                                    <i class="fas fa-plus-circle menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Tambah Galeri</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- ==================== BERITA ==================== --}}
+                        @php
+                            $isBeritaActive = request()->is('admin/berita*');
+                        @endphp
+                        <div x-data="{ open: {{ $isBeritaActive ? 'true' : 'false' }} }">
+                            <button @click="open = !open" 
+                                    class="menu-dropdown-toggle {{ $isBeritaActive ? 'active' : '' }}">
+                                <i class="fas fa-newspaper menu-icon"></i>
+                                <span class="menu-text" 
+                                      x-show="sidebarOpen"
+                                      x-transition:enter.opacity.duration.300ms.delay.100ms 
+                                      x-transition:leave.opacity.duration.100ms>
+                                    Berita
+                                </span>
+                                <i class="fas fa-chevron-down dropdown-arrow" 
+                                   :class="open ? 'open' : ''"
+                                   x-show="sidebarOpen"></i>
+                            </button>
+                            <div x-show="open && sidebarOpen" 
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="menu-dropdown-children">
+                                <a href="{{ route('admin.berita.index') }}" class="menu-item {{ request()->routeIs('admin.berita.index') ? 'active' : '' }}">
+                                    <i class="fas fa-list menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Daftar Berita</span>
+                                </a>
+                                <a href="{{ route('admin.berita.create') }}" class="menu-item {{ request()->routeIs('admin.berita.create') ? 'active' : '' }}">
+                                    <i class="fas fa-plus-circle menu-icon"></i> 
+                                    <span class="menu-text" x-show="sidebarOpen">Tambah Berita</span>
+                                </a>
+                            </div>
+                        </div>
 
                         {{-- GROUP 2: Master Data --}}
                         <div class="menu-group-header" x-show="sidebarOpen">
@@ -695,7 +784,6 @@
             {{-- Header --}}
             <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0 sticky top-0 z-30">
                 <div class="flex items-center gap-4">
-                    {{-- Tombol Toggle Sidebar --}}
                     <button @click="toggleSidebar()" 
                             class="text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out p-2 hover:bg-gray-100 rounded-lg"
                             aria-label="Toggle sidebar">
@@ -757,7 +845,7 @@
                             <div class="max-h-64 overflow-y-auto">
                                 @forelse($notifications as $notif)
                                     <div class="px-4 py-3 hover:bg-gray-50 transition border-b border-gray-100">
-                                        <p class="text-sm text-gray-800 font-medium">{{ $notif->description }}</p>
+                                        <p class="text-sm text-gray-800 font-medium">{{ Str::limit($notif->description, 50) }}</p>
                                         <p class="text-xs text-gray-500 mt-1">
                                             {{ $notif->causer->name ?? 'Sistem' }} • {{ $notif->created_at->diffForHumans() }}
                                         </p>

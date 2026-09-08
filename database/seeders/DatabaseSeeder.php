@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             IdentitasPantiSeeder::class,
             DaftarAkunSeeder::class,
+            PengurusSeeder::class,
+            GaleriSeeder::class,
+            BeritaSeeder::class,
         ]);
     }
 }

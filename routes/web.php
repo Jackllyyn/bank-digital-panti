@@ -29,7 +29,12 @@ use App\Http\Controllers\Admin\TutupBukuController;
 use App\Http\Controllers\Admin\BukuBesarController;
 use App\Http\Controllers\Admin\ArusKasController;
 use App\Http\Controllers\Admin\PenyusutanController;
+use App\Http\Controllers\Admin\KasBesarController;
+use App\Http\Controllers\Admin\PengurusController;
+use App\Http\Controllers\Admin\GaleriController;
+use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\DonationPaymentController;
 
 // Controllers khusus staff
 use App\Http\Controllers\Staff\PenerimaanDonasiController as StaffPenerimaanDonasiController;
@@ -37,11 +42,53 @@ use App\Http\Controllers\Staff\PengeluaranController as StaffPengeluaranControll
 
 // ==================== PUBLIC ROUTES ====================
 Route::get('/', [PublicController::class, 'home'])->name('home');
-Route::get('/about', [PublicController::class, 'about'])->name('about');
-Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery');
-Route::get('/news', [PublicController::class, 'news'])->name('news');
-Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
-Route::get('/donation', [PublicController::class, 'donation'])->name('donation');
+Route::get('/beranda', [PublicController::class, 'home'])->name('beranda');
+
+// About / Tentang Kami
+Route::get('/tentang-kami', [PublicController::class, 'about'])->name('about');
+Route::get('/about', [PublicController::class, 'about'])->name('about.alt');
+
+// Gallery / Galeri
+Route::get('/galeri', [PublicController::class, 'gallery'])->name('gallery');
+Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery.alt');
+Route::get('/galeri/{slug}', [PublicController::class, 'galleryDetail'])->name('gallery.detail');
+Route::get('/gallery/{slug}', [PublicController::class, 'galleryDetail'])->name('gallery.detail.alt');
+
+// News / Berita
+Route::get('/berita', [PublicController::class, 'news'])->name('news');
+Route::get('/news', [PublicController::class, 'news'])->name('news.alt');
+Route::get('/berita/{slug}', [PublicController::class, 'newsDetail'])->name('news.detail');
+Route::get('/news/{slug}', [PublicController::class, 'newsDetail'])->name('news.detail.alt');
+
+// Transparansi / Laporan Keuangan
+Route::get('/transparansi', [PublicController::class, 'transparansi'])->name('transparansi');
+Route::get('/transparency', [PublicController::class, 'transparansi'])->name('transparansi.alt');
+
+// Kontak
+Route::get('/kontak', [PublicController::class, 'contact'])->name('contact');
+Route::get('/contact', [PublicController::class, 'contact'])->name('contact.alt');
+Route::post('/kontak', [PublicController::class, 'contactSend'])->name('contact.send');
+Route::post('/contact', [PublicController::class, 'contactSend'])->name('contact.send.alt');
+
+// Donasi
+Route::get('/donasi', [PublicController::class, 'donation'])->name('donation');
+Route::get('/donation', [PublicController::class, 'donation'])->name('donation.alt');
+Route::post('/donasi', [PublicController::class, 'donationStore'])->name('donation.store');
+Route::get('/donasi/sukses', [PublicController::class, 'donationSuccess'])->name('donation.success');
+
+// Payment Routes
+Route::post('/donasi/payment', [DonationPaymentController::class, 'createTransaction'])->name('donation.payment');
+Route::get('/donasi/payment-success', [DonationPaymentController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/donasi/payment-failed', [DonationPaymentController::class, 'paymentFailed'])->name('payment.failed');
+Route::post('/donasi/notification', [DonationPaymentController::class, 'notificationHandler'])->name('payment.notification');
+
+// Aktivitas / Activity Log
+Route::get('/aktivitas', [PublicController::class, 'activities'])->name('activities');
+Route::get('/activity', [PublicController::class, 'activities'])->name('activities.alt');
+
+// Program
+Route::get('/program', [PublicController::class, 'programs'])->name('programs');
+Route::get('/program/{slug}', [PublicController::class, 'programDetail'])->name('program.detail');
 
 // ====================== DASHBOARD REDIRECT ======================
 Route::get('/dashboard', function () {
@@ -66,6 +113,15 @@ Route::prefix('admin')
     ->group(function () {
 
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        // ==================== PENGURUS ====================
+        Route::resource('pengurus', PengurusController::class);
+
+        // ==================== GALERI ====================
+        Route::resource('galeri', GaleriController::class);
+
+        // ==================== BERITA ====================
+        Route::resource('berita', BeritaController::class);
 
         // Import Routes
         Route::prefix('import')->group(function () {
@@ -185,17 +241,13 @@ Route::prefix('admin')
         Route::resource('staff', StaffController::class)->except(['show']);
 
         // Kas Besar
-        Route::get('kas-besar/export/excel', [App\Http\Controllers\Admin\KasBesarController::class, 'exportExcel'])->name('kas-besar.export.excel');
-        Route::resource('kas-besar', App\Http\Controllers\Admin\KasBesarController::class)->except(['show']);
-        Route::post('kas-besar', [App\Http\Controllers\Admin\KasBesarController::class, 'destroy'])->name('admin.kas-besar.destroy');
-        Route::post('kas-besar', [App\Http\Controllers\Admin\KasBesarController::class, 'store'])->name('admin.kas-besar.store');
-        Route::get('kas-besar/{id}/print', [App\Http\Controllers\Admin\KasBesarController::class, 'struk'])->name('kas-besar.print');
+        Route::get('kas-besar/export/excel', [KasBesarController::class, 'exportExcel'])->name('kas-besar.export.excel');
+        Route::resource('kas-besar', KasBesarController::class)->except(['show']);
+        Route::get('kas-besar/{id}/print', [KasBesarController::class, 'struk'])->name('kas-besar.print');
 
         // Kas Kecil
         Route::resource('kas-kecil', KasKecilController::class)->except(['show']);
         Route::get('kas-kecil/export/excel', [KasKecilController::class, 'exportExcel'])->name('kas-kecil.export.excel');
-        Route::post('kas-kecil', [KasKecilController::class, 'destroy'])->name('admin.kas-kecil.destroy');
-        Route::post('kas-kecil', [KasKecilController::class, 'store'])->name('admin.kas-kecil.store');
         Route::get('kas-kecil/{id}/print', [KasKecilController::class, 'struk'])->name('kas-kecil.print');
 
         // Test Kop Surat
@@ -230,4 +282,3 @@ Route::prefix('staff')
 
 // ====================== AUTHENTICATION ROUTES ======================
 require __DIR__ . '/auth.php';
-

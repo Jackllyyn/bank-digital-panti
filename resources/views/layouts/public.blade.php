@@ -177,11 +177,12 @@
             </a>
 
             <div class="hidden md:flex items-center gap-4 lg:gap-6">
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'home') text-primary font-bold border-b-2 border-primary @endif" href="{{ route('home') }}">Beranda</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'about') text-primary font-bold border-b-2 border-primary @endif" href="{{ route('about') }}">Tentang</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'gallery') text-primary font-bold border-b-2 border-primary @endif" href="{{ route('gallery') }}">Galeri</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'news') text-primary font-bold border-b-2 border-primary @endif" href="{{ route('news') }}">Berita</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'contact') text-primary font-bold border-b-2 border-primary @endif" href="{{ route('contact') }}">Kontak</a>
+                {{-- PERBAIKAN DI SINI (request()->routeIs) --}}
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('home')) text-primary font-bold border-b-2 border-primary @endif" href="{{ route('home') }}">Beranda</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('about')) text-primary font-bold border-b-2 border-primary @endif" href="{{ route('about') }}">Tentang</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('gallery')) text-primary font-bold border-b-2 border-primary @endif" href="{{ route('gallery') }}">Galeri</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('news')) text-primary font-bold border-b-2 border-primary @endif" href="{{ route('news') }}">Berita</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('contact')) text-primary font-bold border-b-2 border-primary @endif" href="{{ route('contact') }}">Kontak</a>
             </div>
 
             <div class="hidden md:flex items-center gap-2 lg:gap-3">
@@ -190,7 +191,7 @@
                 @else
                     <a href="{{ route('login') }}" class="px-4 py-2 bg-surface text-secondary border border-secondary rounded-full font-jakarta text-sm font-medium hover:bg-surface-container-low transition-colors">Login</a>
                 @endauth
-                <a href="{{ route('donation') }}" class="px-4 py-2 bg-primary-container text-on-primary rounded-full font-jakarta text-sm font-medium hover:bg-[#004a26] transition-colors shadow-sm pulse-glow">Donasi</a>
+                
             </div>
 
             <button class="md:hidden text-on-surface" id="mobileMenuBtn" aria-label="Toggle menu">
@@ -200,18 +201,19 @@
 
         <div id="mobileMenu" class="hidden md:hidden bg-surface/95 backdrop-blur-md shadow-lg px-4 py-4 border-t border-outline-variant">
             <div class="flex flex-col space-y-3">
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'home') text-primary font-bold @endif" href="{{ route('home') }}">Beranda</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'about') text-primary font-bold @endif" href="{{ route('about') }}">Tentang</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'gallery') text-primary font-bold @endif" href="{{ route('gallery') }}">Galeri</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'news') text-primary font-bold @endif" href="{{ route('news') }}">Berita</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(Route::currentRouteName() == 'contact') text-primary font-bold @endif" href="{{ route('contact') }}">Kontak</a>
+                {{-- PERBAIKAN DI SINI (request()->routeIs) --}}
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('home')) text-primary font-bold @endif" href="{{ route('home') }}">Beranda</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('about')) text-primary font-bold @endif" href="{{ route('about') }}">Tentang</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('gallery')) text-primary font-bold @endif" href="{{ route('gallery') }}">Galeri</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('news')) text-primary font-bold @endif" href="{{ route('news') }}">Berita</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-jakarta font-medium text-sm @if(request()->routeIs('contact')) text-primary font-bold @endif" href="{{ route('contact') }}">Kontak</a>
+                
                 <div class="flex flex-col gap-2 pt-3 border-t border-outline-variant">
                     @auth
                         <a href="{{ route('admin.dashboard') }}" class="w-full text-center px-4 py-2 bg-surface text-secondary border border-secondary rounded-full font-jakarta text-sm font-medium">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}" class="w-full text-center px-4 py-2 bg-surface text-secondary border border-secondary rounded-full font-jakarta text-sm font-medium">Login</a>
                     @endauth
-                    <a href="{{ route('donation') }}" class="w-full text-center px-4 py-2 bg-primary-container text-on-primary rounded-full font-jakarta text-sm font-medium">Donasi Sekarang</a>
                 </div>
             </div>
         </div>
