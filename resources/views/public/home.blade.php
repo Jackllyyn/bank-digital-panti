@@ -3,283 +3,270 @@
 @section('title', 'Beranda - PAM Pesantunan')
 
 @section('content')
-<!-- ==================== HERO SECTION ==================== -->
-<section class="relative min-h-screen flex items-center parallax-bg" style="background-image: url('{{ $identitas->logo ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuCnakXJDCpyj_j3jSikzZ6qxZy8K-I2f5-mqv-gVcOgwEr9lxSq1eUolZ6PpKUVKO2JBo50UR1jEDWwsTBFC91f9pO14EoGQuSbwtUNklRi6mroEyqifX7sfhS8PWwfas9KQ5rTKaC2auOf5lZ4vinzPDxI4gc2FtXhcjF1clmxYKFRTo4rhE0cr5mLG4Q8w6FY69hNn103ENZmu_t21qG8Cjyj4FaWKlENZ4JI01MrieJAVWp5yHL6' }}')">
-    <div class="absolute inset-0 bg-gradient-to-r from-[#00522c]/80 to-transparent"></div>
-    <div class="relative z-10 w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 max-w-[1440px] mx-auto py-20 sm:py-24">
-        <div class="max-w-3xl reveal">
-            <span class="inline-block px-4 sm:px-5 py-1.5 bg-primary-fixed/90 text-[#00522c] rounded-full font-dancing text-base sm:text-lg shadow-sm float-animation">
-                ✦ Lembaga Terpercaya ✦
+
+{{-- ==================== HERO ==================== --}}
+<section class="relative min-h-[560px] md:min-h-[640px] flex items-center overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="{{ $identitas->logo ?? 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600' }}"
+             alt="{{ $identitas->nama_panti ?? 'Panti Asuhan' }}"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-hero-overlay"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-20 md:py-28">
+        <div class="max-w-2xl">
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-medium rounded-md mb-5 slide-in-left">
+                <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                Lembaga Sosial Terpercaya
             </span>
-            
-            <h1 class="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-[56px] leading-tight mb-3 sm:mb-4 text-shadow text-on-primary mt-3">
-                Membangun Masa Depan Bersama 
-                <span class="text-gradient-gold font-playfair italic">Panti Asuhan</span>
-                <br>
-                <span class="font-dancing text-4xl sm:text-5xl md:text-6xl lg:text-[64px] text-on-primary" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                    {{ $identitas->nama_panti ?? 'Muhammadiyah Pesantunan' }}
-                </span>
+
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold leading-[1.1] text-white mb-4 slide-in-left" style="animation-delay: 0.1s;">
+                Membangun Masa Depan
+                <span class="text-green-400">Anak Yatim &amp; Dhuafa</span>
             </h1>
-            
-            <p class="font-dm-serif text-base sm:text-lg md:text-xl text-surface-container-low mb-4 sm:mb-6 text-shadow-light leading-relaxed">
-                "{{ $identitas->tagline ?? 'Amanah, Transparan, dan Mandiri dengan Integrasi Kas Digital untuk memastikan setiap donasi Anda tepat sasaran.' }}"
+
+            <p class="text-base sm:text-lg text-gray-200 mb-8 leading-relaxed max-w-xl slide-in-left" style="animation-delay: 0.2s;">
+                {{ $identitas->tagline ?? 'Amanah, transparan, dan mandiri. Setiap donasi Anda tercatat dan tersalurkan dengan tepat sasaran.' }}
             </p>
-            
-            <div class="decorative-line-gold mb-5 sm:mb-6"></div>
-            
-            <div class="flex flex-wrap gap-3 sm:gap-4">
-                <a href="{{ route('donation') }}" class="px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-gradient-to-r from-[#006d3c] to-[#00a859] text-on-primary rounded-full font-jakarta font-semibold text-sm sm:text-base hover:shadow-lg transition-all flex items-center gap-2 pulse-glow">
-                    <span class="material-symbols-outlined text-sm">volunteer_activism</span>
-                    Mulai Donasi
-                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+
+            <div class="flex flex-wrap gap-3 slide-in-left" style="animation-delay: 0.3s;">
+                <a href="{{ route('donation') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-green-700 hover:bg-green-800 text-white rounded-lg font-semibold text-sm transition-all hover:shadow-lg hover:-translate-y-0.5">
+                    <span class="material-symbols-outlined text-lg">volunteer_activism</span>
+                    Donasi Sekarang
                 </a>
-                <a href="{{ route('about') }}" class="px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-surface/20 backdrop-blur-sm text-on-primary border border-on-primary/30 rounded-full font-jakarta font-medium text-sm sm:text-base hover:bg-surface/30 transition-colors flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">info</span>
-                    Lihat Program Kami
+                <a href="{{ route('about') }}"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg font-medium text-sm transition-colors">
+                    <span class="material-symbols-outlined text-lg">info</span>
+                    Tentang Kami
                 </a>
             </div>
-            
-            <p class="font-great-vibes text-2xl sm:text-3xl text-on-primary/70 mt-6 sm:mt-8">
-                "{{ $identitas->quote ?? 'Berbagi untuk masa depan yang lebih cerah' }}"
-            </p>
         </div>
     </div>
 </section>
 
-<!-- ==================== KAS DIGITAL PREVIEW ==================== -->
-<section class="py-10 sm:py-14 md:py-18 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 bg-surface-container-lowest relative z-20 -mt-6 sm:-mt-10 md:-mt-16 lg:-mt-20 rounded-t-2xl sm:rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
-    <div class="max-w-[1440px] mx-auto">
-        <div class="text-center mb-8 sm:mb-12 lg:mb-16 reveal">
-            <span class="font-dancing text-2xl sm:text-3xl text-gold-light inline-block mb-2">✦ Transparansi ✦</span>
-            <h2 class="font-playfair text-2xl sm:text-3xl lg:text-[36px] text-on-surface mb-2 sm:mb-3">
-                Finansial <span class="text-primary">Real-time</span>
+{{-- ==================== STATISTIK ==================== --}}
+<section class="relative z-20 -mt-12 md:-mt-16 px-4 sm:px-6 md:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+
+            <div class="p-6 md:p-7 reveal">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-green-800">account_balance_wallet</span>
+                    </div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Donasi Bulan Ini</p>
+                </div>
+                <p class="text-2xl md:text-3xl font-bold text-gray-900 tabular-nums">
+                    Rp {{ number_format($donasiBulanIni ?? 0, 0, ',', '.') }}
+                </p>
+            </div>
+
+            <div class="p-6 md:p-7 reveal" style="transition-delay: 0.1s;">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-green-800">group</span>
+                    </div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Anak Asuh</p>
+                </div>
+                <p class="text-2xl md:text-3xl font-bold text-gray-900">
+                    {{ $totalAnakAktif ?? 0 }} Anak
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                    {{ $totalAnakLaki ?? 0 }}L · {{ $totalAnakPerempuan ?? 0 }}P
+                </p>
+            </div>
+
+            <div class="p-6 md:p-7 reveal" style="transition-delay: 0.2s;">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-green-800">favorite</span>
+                    </div>
+                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Donatur</p>
+                </div>
+                <p class="text-2xl md:text-3xl font-bold text-gray-900 tabular-nums">
+                    {{ number_format($totalDonatur ?? 0, 0, ',', '.') }}
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{-- ==================== TRANSPARANSI ==================== --}}
+<section class="py-16 md:py-24 px-4 sm:px-6 md:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 reveal">
+            <p class="text-sm font-medium text-green-800 mb-2 uppercase tracking-wide">Transparansi</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Laporan Keuangan Real-time
             </h2>
-            <div class="decorative-line mx-auto mb-3 sm:mb-4"></div>
-            <p class="font-dm-serif text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto">
-                Pantau aliran dana secara langsung melalui sistem kas digital terintegrasi kami, menjamin setiap rupiah dikelola dengan penuh amanah.
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Pantau aliran dana secara langsung. Setiap rupiah tercatat dengan penuh amanah.
             </p>
         </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            <!-- Card 1: Total Donasi -->
-            <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-7 soft-shadow hover-soft-shadow reveal border-t-4 border-secondary border border-outline-variant/30 group hover:bg-gradient-to-b hover:from-white hover:to-green-50 transition-all">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="font-jakarta text-sm font-medium text-on-surface-variant">Total Donasi Bulan Ini</span>
-                    <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-                    </div>
-                </div>
-                <div class="font-playfair text-2xl sm:text-3xl text-on-surface mb-1">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-7 hover-soft-shadow transition-all reveal">
+                <p class="text-sm text-gray-500 mb-3">Penerimaan Bulan Ini</p>
+                <p class="text-2xl md:text-3xl font-bold text-green-700 tabular-nums mb-2">
                     Rp {{ number_format($donasiBulanIni ?? 0, 0, ',', '.') }}
-                </div>
-                <div class="flex items-center gap-1 text-primary font-jakarta text-sm font-medium">
+                </p>
+                <div class="flex items-center gap-1 text-xs text-gray-500">
                     <span class="material-symbols-outlined text-sm">trending_up</span>
                     <span>Update real-time</span>
                 </div>
             </div>
 
-            <!-- Card 2: Anak Asuh -->
-            <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-7 soft-shadow hover-soft-shadow reveal border-t-4 border-primary-container border border-outline-variant/30 group hover:bg-gradient-to-b hover:from-white hover:to-green-50 transition-all" style="transition-delay: 100ms;">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="font-jakarta text-sm font-medium text-on-surface-variant">Anak Asuh Tersantuni</span>
-                    <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">group</span>
-                    </div>
-                </div>
-                <div class="font-playfair text-2xl sm:text-3xl text-on-surface mb-1">
-                    {{ $totalAnakAktif ?? 0 }} Anak
-                </div>
-                <div class="flex items-center gap-1 text-primary font-jakarta text-sm font-medium">
-                    <span class="material-symbols-outlined text-sm">check_circle</span>
-                    <span>{{ $totalAnakLaki ?? 0 }} Laki-laki, {{ $totalAnakPerempuan ?? 0 }} Perempuan</span>
+            <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-7 hover-soft-shadow transition-all reveal" style="transition-delay: 0.1s;">
+                <p class="text-sm text-gray-500 mb-3">Pengeluaran Bulan Ini</p>
+                <p class="text-2xl md:text-3xl font-bold text-gray-900 tabular-nums mb-2">
+                    Rp {{ number_format($pengeluaranBulanIni ?? 0, 0, ',', '.') }}
+                </p>
+                <div class="flex items-center gap-1 text-xs text-gray-500">
+                    <span class="material-symbols-outlined text-sm">receipt_long</span>
+                    <span>Operasional panti</span>
                 </div>
             </div>
 
-            <!-- Card 3: Aktivitas Terbaru -->
-            <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-7 soft-shadow hover-soft-shadow reveal border border-outline-variant/30 sm:col-span-2 lg:col-span-1 group hover:bg-gradient-to-b hover:from-white hover:to-green-50 transition-all" style="transition-delay: 200ms;">
-                <h3 class="font-jakarta font-semibold text-lg text-on-surface mb-3 flex justify-between items-center">
-                    <span class="font-playfair">Aktivitas Terbaru</span>
-                    <a href="{{ route('activities') }}" class="text-secondary font-jakarta text-sm font-medium cursor-pointer hover:underline">Lihat Semua</a>
-                </h3>
-                <div class="space-y-2">
-                    @forelse($aktivitasTerbaru ?? [] as $log)
-                        <div class="flex justify-between items-center py-2 border-b border-outline-variant/20">
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <div class="w-8 h-8 rounded-full bg-primary-fixed/30 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-primary text-sm">
-                                        {{ str_contains($log->description ?? '', 'donasi') ? 'arrow_downward' : 'arrow_upward' }}
-                                    </span>
-                                </div>
-                                <div>
-                                    <p class="font-jakarta text-sm font-medium text-on-surface">{{ $log->causer?->name ?? 'System' }}</p>
-                                    {{-- PERBAIKAN DI SINI: Menggunakan \Illuminate\Support\Str::limit --}}
-                                    <p class="font-body-md text-xs text-on-surface-variant">{{ \Illuminate\Support\Str::limit($log->description ?? 'Aktivitas', 50) }}</p>
-                                </div>
-                            </div>
-                            @if(isset($log->properties['attributes']['jumlah']))
-                                <span class="font-jakarta text-sm font-semibold text-primary">
-                                    +Rp {{ number_format($log->properties['attributes']['jumlah'], 0, ',', '.') }}
-                                </span>
-                            @endif
-                        </div>
-                    @empty
-                        <p class="text-gray-500 text-center py-4">Belum ada aktivitas</p>
-                    @endforelse
+            <div class="bg-white border border-gray-200 rounded-xl p-6 md:p-7 hover-soft-shadow transition-all reveal" style="transition-delay: 0.2s;">
+                <p class="text-sm text-gray-500 mb-3">Saldo Bulan Ini</p>
+                <p class="text-2xl md:text-3xl font-bold {{ ($surplusBulanIni ?? 0) >= 0 ? 'text-green-700' : 'text-red-700' }} tabular-nums mb-2">
+                    Rp {{ number_format($surplusBulanIni ?? 0, 0, ',', '.') }}
+                </p>
+                <div class="flex items-center gap-1 text-xs text-gray-500">
+                    <span class="material-symbols-outlined text-sm">{{ ($surplusBulanIni ?? 0) >= 0 ? 'check_circle' : 'warning' }}</span>
+                    <span>{{ ($surplusBulanIni ?? 0) >= 0 ? 'Surplus' : 'Defisit' }}</span>
                 </div>
             </div>
+        </div>
+
+        <div class="text-center mt-8 reveal">
+            <a href="{{ route('transparansi') }}"
+               class="inline-flex items-center gap-2 text-green-800 font-medium hover:gap-3 transition-all">
+                Lihat Laporan Lengkap
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- ==================== PROGRAM KAMI ==================== -->
-<section class="py-10 sm:py-14 md:py-18 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 max-w-[1440px] mx-auto">
-    <div class="text-center mb-8 sm:mb-12 lg:mb-16 reveal">
-        <span class="font-dancing text-2xl sm:text-3xl text-gold-light inline-block mb-2">✦ Program ✦</span>
-        <h2 class="font-playfair text-2xl sm:text-3xl lg:text-[36px] text-on-surface mb-2 sm:mb-3">
-            Unggulan <span class="text-primary">Kami</span>
-        </h2>
-        <div class="decorative-line mx-auto mb-3 sm:mb-4"></div>
-        <p class="font-dm-serif text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto">
-            Berbagai program yang kami jalankan untuk memberikan manfaat terbaik bagi anak-anak asuh.
-        </p>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+{{-- ==================== PROGRAM ==================== --}}
+<section class="py-16 md:py-24 px-4 sm:px-6 md:px-8 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 reveal">
+            <p class="text-sm font-medium text-green-800 mb-2 uppercase tracking-wide">Program</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Program Unggulan Kami
+            </h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Berbagai program untuk memberikan manfaat terbaik bagi anak-anak asuh.
+            </p>
+        </div>
+
         @php
             $programs = [
                 ['icon' => 'menu_book', 'title' => 'Pendidikan Berkualitas', 'desc' => 'Menyediakan akses pendidikan formal dan non-formal untuk anak asuh.'],
-                ['icon' => 'favorite', 'title' => 'Pengasuhan Holistik', 'desc' => 'Pengasuhan yang memperhatikan aspek fisik, mental, dan spiritual anak.'],
-                ['icon' => 'handshake', 'title' => 'Kemandirian Ekonomi', 'desc' => 'Melatih keterampilan untuk bekal hidup mandiri di masa depan.']
+                ['icon' => 'favorite',  'title' => 'Pengasuhan Holistik',    'desc' => 'Pengasuhan yang memperhatikan aspek fisik, mental, dan spiritual anak.'],
+                ['icon' => 'handshake', 'title' => 'Kemandirian Ekonomi',    'desc' => 'Melatih keterampilan untuk bekal hidup mandiri di masa depan.'],
             ];
         @endphp
-        @foreach($programs as $index => $program)
-            <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-8 soft-shadow hover-soft-shadow reveal text-center group hover:bg-gradient-to-b hover:from-white hover:to-green-50 transition-all" style="transition-delay: {{ $index * 100 }}ms;">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary-fixed/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-primary text-3xl sm:text-4xl">{{ $program['icon'] }}</span>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach($programs as $i => $program)
+                <div class="bg-white border border-gray-200 rounded-xl p-7 hover-soft-shadow hover:border-green-700 transition-all reveal-scale"
+                     style="transition-delay: {{ $i * 0.1 }}s;">
+                    <div class="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center mb-5">
+                        <span class="material-symbols-outlined text-green-800 text-2xl">{{ $program['icon'] }}</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $program['title'] }}</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">{{ $program['desc'] }}</p>
                 </div>
-                <h3 class="font-playfair text-lg sm:text-xl text-on-surface mb-2">{{ $program['title'] }}</h3>
-                <p class="font-jakarta text-sm sm:text-base text-on-surface-variant">{{ $program['desc'] }}</p>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
+
+        <div class="text-center mt-10 reveal">
+            <a href="{{ route('programs') }}"
+               class="inline-flex items-center gap-2 text-green-800 font-medium hover:gap-3 transition-all">
+                Lihat Semua Program
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
+        </div>
     </div>
 </section>
 
-<!-- ==================== PENGURUS PANTI (Preview) ==================== -->
-<section class="py-10 sm:py-14 md:py-18 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 max-w-[1440px] mx-auto bg-surface-container-low">
-    <div class="max-w-[1440px] mx-auto">
-        <div class="text-center mb-8 sm:mb-12 lg:mb-16 reveal">
-            <span class="font-dancing text-2xl sm:text-3xl text-gold-light inline-block mb-2">✦ Pengurus ✦</span>
-            <h2 class="font-playfair text-2xl sm:text-3xl lg:text-[36px] text-on-surface mb-2 sm:mb-3">
-                Struktur <span class="text-primary">Pengurus</span>
+{{-- ==================== PENGURUS ==================== --}}
+@if(isset($pengurusPreview) && $pengurusPreview->count() > 0)
+<section class="py-16 md:py-24 px-4 sm:px-6 md:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 reveal">
+            <p class="text-sm font-medium text-green-800 mb-2 uppercase tracking-wide">Pengurus</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Struktur Pengurus
             </h2>
-            <div class="decorative-line mx-auto mb-3 sm:mb-4"></div>
-            <p class="font-dm-serif text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto">
-                Diperankan oleh para profesional yang berdedikasi untuk memberikan pelayanan terbaik bagi anak-anak asuh.
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Diperankan oleh para profesional yang berdedikasi untuk pelayanan terbaik.
             </p>
         </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            @forelse($pengurusPreview ?? [] as $item)
-                <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-7 soft-shadow hover-soft-shadow reveal text-center group hover:bg-gradient-to-b hover:from-white hover:to-green-50 transition-all">
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded-full overflow-hidden mb-3 border-2 border-primary-fixed-dim group-hover:border-primary transition-colors">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            @foreach($pengurusPreview as $i => $item)
+                <div class="bg-white border border-gray-200 rounded-xl p-7 text-center hover-soft-shadow transition-all reveal-scale"
+                     style="transition-delay: {{ $i * 0.1 }}s;">
+                    <div class="w-20 h-20 mx-auto rounded-full overflow-hidden mb-4 bg-gray-100 ring-4 ring-green-50">
                         @if(!empty($item->foto))
                             <img class="w-full h-full object-cover" src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}">
                         @else
-                            <div class="w-full h-full bg-primary-fixed/20 flex items-center justify-center text-2xl sm:text-3xl text-primary font-bold">
+                            <div class="w-full h-full flex items-center justify-center text-xl text-gray-500 font-medium">
                                 {{ $item->nama[0] ?? '?' }}
                             </div>
                         @endif
                     </div>
-                    <h3 class="font-playfair text-lg sm:text-xl text-on-surface">{{ $item->nama ?? '-' }}</h3>
-                    <p class="font-jakarta text-sm text-primary font-medium">{{ $item->jabatan ?? '-' }}</p>
-                    <p class="font-jakarta text-xs sm:text-sm text-on-surface-variant mt-2 line-clamp-2">{{ $item->deskripsi ?? '' }}</p>
-                </div>
-            @empty
-                <div class="col-span-full text-center text-on-surface-variant py-8">
-                    <p>Belum ada data pengurus.</p>
-                </div>
-            @endforelse
-        </div>
-        
-        <div class="text-center mt-6 sm:mt-8 reveal">
-            <a href="{{ route('about') }}" class="inline-flex items-center gap-2 px-6 py-2.5 border border-primary text-primary rounded-full font-jakarta text-sm hover:bg-primary hover:text-white transition-all">
-                Lihat Semua Pengurus
-                <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- ==================== TESTIMONI ==================== -->
-<section class="py-10 sm:py-14 md:py-18 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 bg-gradient-to-b from-surface-container-low to-white">
-    <div class="max-w-[1440px] mx-auto">
-        <div class="text-center mb-8 sm:mb-12 lg:mb-16 reveal">
-            <span class="font-dancing text-2xl sm:text-3xl text-gold-light inline-block mb-2">✦ Testimoni ✦</span>
-            <h2 class="font-playfair text-2xl sm:text-3xl lg:text-[36px] text-on-surface mb-2 sm:mb-3">
-                Apa Kata <span class="text-primary">Mereka</span>
-            </h2>
-            <div class="decorative-line mx-auto mb-3 sm:mb-4"></div>
-            <p class="font-dm-serif text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto">
-                Testimoni dari para donatur dan mitra yang telah mendukung perjalanan kami.
-            </p>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            @php
-                $testimonis = [
-                    ['name' => 'Bapak Ahmad', 'role' => 'Donatur Tetap', 'text' => 'Saya sangat percaya dengan transparansi yang diterapkan PAM Pesantunan. Setiap donasi terlihat jelas penyalurannya.', 'initial' => 'B'],
-                    ['name' => 'Ibu Siti', 'role' => 'Relawan', 'text' => 'Melihat senyum anak-anak asuh adalah kebahagiaan tersendiri. Semoga PAM Pesantunan terus berkembang.', 'initial' => 'S'],
-                    ['name' => 'PT. Maju Jaya', 'role' => 'Mitra Perusahaan', 'text' => 'Program CSR kami bersama PAM Pesantunan berjalan dengan sangat baik dan terukur.', 'initial' => 'M']
-                ];
-            @endphp
-            @foreach($testimonis as $index => $item)
-                <div class="bg-surface-container-lowest rounded-xl p-5 sm:p-6 lg:p-8 soft-shadow reveal hover:shadow-xl transition-shadow" style="transition-delay: {{ $index * 100 }}ms;">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-fixed/40 flex items-center justify-center text-primary font-playfair text-lg sm:text-xl font-bold">{{ $item['initial'] }}</div>
-                        <div>
-                            <p class="font-jakarta font-semibold text-sm sm:text-base text-on-surface">{{ $item['name'] }}</p>
-                            <p class="font-jakarta text-xs sm:text-sm text-on-surface-variant">{{ $item['role'] }}</p>
-                        </div>
-                    </div>
-                    <p class="font-instrument text-base sm:text-lg text-on-surface-variant italic leading-relaxed">
-                        "{{ $item['text'] }}"
-                    </p>
-                    <div class="mt-2 text-gold-light">
-                        @for($i = 1; $i <= 5; $i++)
-                            <span class="material-symbols-outlined text-sm">star</span>
-                        @endfor
-                    </div>
+                    <h3 class="font-semibold text-gray-900">{{ $item->nama }}</h3>
+                    <p class="text-sm text-green-800 font-medium mt-1">{{ $item->jabatan }}</p>
+                    @if(!empty($item->deskripsi))
+                        <p class="text-xs text-gray-500 mt-3 line-clamp-2 leading-relaxed">{{ $item->deskripsi }}</p>
+                    @endif
                 </div>
             @endforeach
         </div>
+
+        <div class="text-center mt-10 reveal">
+            <a href="{{ route('about') }}"
+               class="inline-flex items-center gap-2 text-green-800 font-medium hover:gap-3 transition-all">
+                Lihat Semua Pengurus
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+</section>
+@endif
+
+{{-- ==================== CTA DONASI ==================== --}}
+<section class="px-4 sm:px-6 md:px-8 pb-16 md:pb-24">
+    <div class="max-w-6xl mx-auto">
+        <div class="relative bg-green-800 rounded-2xl overflow-hidden reveal-scale">
+            <div class="absolute inset-0 opacity-[0.08]">
+                <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white"></div>
+                <div class="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-white"></div>
+            </div>
+
+            <div class="relative px-6 py-14 md:px-16 md:py-20 text-center">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
+                    Bantu Masa Depan Anak-Anak Kami
+                </h2>
+                <p class="text-green-100 mb-8 max-w-xl mx-auto text-base leading-relaxed">
+                    Setiap donasi Anda tercatat dan tersalurkan dengan transparan. Satu kebaikan, ribuan harapan.
+                </p>
+                <a href="{{ route('donation') }}"
+                   class="inline-flex items-center gap-2 px-8 py-4 bg-white text-green-800 rounded-lg font-semibold hover:bg-gray-100 transition-all hover:shadow-xl hover:-translate-y-0.5 pulse-soft">
+                    <span class="material-symbols-outlined">favorite</span>
+                    Donasi Sekarang
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- ==================== CTA DONASI ==================== -->
-<section class="py-10 sm:py-14 md:py-18 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 max-w-[1440px] mx-auto">
-    <div class="bg-gradient-to-r from-[#006d3c] to-[#00a859] rounded-2xl p-6 sm:p-8 md:p-10 lg:p-14 xl:p-16 text-center text-on-primary relative overflow-hidden">
-        <div class="absolute top-0 right-0 opacity-10">
-            <span class="material-symbols-outlined text-[120px] sm:text-[150px] md:text-[200px]">volunteer_activism</span>
-        </div>
-        <div class="absolute bottom-0 left-0 opacity-5">
-            <span class="material-symbols-outlined text-[100px] sm:text-[150px]">mosque</span>
-        </div>
-        <div class="relative z-10 max-w-2xl mx-auto reveal">
-            <span class="font-dancing text-2xl sm:text-3xl inline-block mb-2">✦ Berbagi Kasih ✦</span>
-            <h2 class="font-playfair text-2xl sm:text-3xl lg:text-[36px] mb-2 sm:mb-3">
-                Siap Membantu Masa Depan Mereka?
-            </h2>
-            <p class="font-dm-serif text-base sm:text-lg mb-4 sm:mb-6 opacity-90 leading-relaxed">
-                "Setiap donasi Anda adalah investasi untuk masa depan anak-anak asuh yang lebih cerah."
-            </p>
-            <div class="decorative-line mx-auto mb-4 sm:mb-6" style="background: linear-gradient(90deg, #f6d365, #fda085);"></div>
-            <a href="{{ route('donation') }}" class="inline-block px-8 sm:px-10 md:px-12 py-3 sm:py-4 bg-gradient-to-r from-[#f6d365] to-[#fda085] text-[#00522c] rounded-full font-jakarta font-bold text-sm sm:text-base hover:shadow-2xl transition-all transform hover:scale-105 shadow-lg">
-                <span class="material-symbols-outlined align-middle text-sm">favorite</span>
-                Donasi Sekarang
-                <span class="material-symbols-outlined align-middle text-sm">arrow_forward</span>
-            </a>
-            <p class="font-great-vibes text-xl sm:text-2xl mt-4 sm:mt-6 text-on-primary/60">
-                "Satu kebaikan, ribuan harapan"
-            </p>
-        </div>
-    </div>
-</section>
 @endsection
