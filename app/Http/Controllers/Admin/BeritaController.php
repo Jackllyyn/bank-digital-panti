@@ -25,19 +25,19 @@ class BeritaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'konten' => 'required|string',
-            'kategori' => 'nullable|string|max:100',
-            'penulis' => 'nullable|string|max:100',
+            'judul'        => 'required|string|max:255',
+            'konten'       => 'required|string',
+            'kategori'     => 'nullable|string|max:100',
+            'penulis'      => 'nullable|string|max:100',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
-            'gambar' => 'nullable|image|max:5120'
+            'gambar'       => 'nullable|image|max:5120'
         ]);
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->judul) . '-' . time();
-        $data['is_published'] = $request->has('is_published') ? true : false;
-        
+        $data['is_published'] = $request->boolean('is_published');  // ⬅️ diubah
+
         if ($request->hasFile('gambar')) {
             $data['gambar'] = $request->file('gambar')->store('berita', 'public');
         }
@@ -48,27 +48,21 @@ class BeritaController extends Controller
             ->with('success', 'Berita berhasil ditambahkan!');
     }
 
-    public function edit($id)
-    {
-        $berita = Berita::findOrFail($id);
-        return view('admin.berita.edit', compact('berita'));
-    }
-
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string|max:255',
-            'konten' => 'required|string',
-            'kategori' => 'nullable|string|max:100',
-            'penulis' => 'nullable|string|max:100',
+            'judul'        => 'required|string|max:255',
+            'konten'       => 'required|string',
+            'kategori'     => 'nullable|string|max:100',
+            'penulis'      => 'nullable|string|max:100',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',
-            'gambar' => 'nullable|image|max:5120'
+            'gambar'       => 'nullable|image|max:5120'
         ]);
 
         $berita = Berita::findOrFail($id);
         $data = $request->all();
-        $data['is_published'] = $request->has('is_published') ? true : false;
+        $data['is_published'] = $request->boolean('is_published');  // ⬅️ diubah
 
         if ($request->hasFile('gambar')) {
             if ($berita->gambar) {
@@ -82,15 +76,21 @@ class BeritaController extends Controller
         return redirect()->route('admin.berita.index')
             ->with('success', 'Berita berhasil diperbarui!');
     }
+    public function edit($id)
+    {
+        $berita = Berita::findOrFail($id);
+        return view('admin.berita.edit', compact('berita'));
+    }
+
 
     public function destroy($id)
     {
         $berita = Berita::findOrFail($id);
-        
+
         if ($berita->gambar) {
             Storage::disk('public')->delete($berita->gambar);
         }
-        
+
         $berita->delete();
 
         return redirect()->route('admin.berita.index')

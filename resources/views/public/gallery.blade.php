@@ -1,3 +1,4 @@
+{{-- resources/views/public/gallery.blade.php --}}
 @extends('layouts.public')
 
 @section('title', 'Galeri - PAM Pesantunan')
@@ -54,6 +55,12 @@
                     <h3 class="text-white font-title-lg text-sm sm:text-base">{{ $item->judul ?? '-' }}</h3>
                     @if(!empty($item->kategori))
                         <span class="text-white/80 font-label-sm text-xs mt-1">{{ $item->kategori }}</span>
+                    @endif
+                    @if(!empty($item->lokasi))
+                        <span class="text-white/70 font-label-sm text-xs mt-0.5 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">location_on</span>
+                            {{ $item->lokasi }}
+                        </span>
                     @endif
                 </div>
             </div>

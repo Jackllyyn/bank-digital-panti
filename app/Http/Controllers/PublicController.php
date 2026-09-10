@@ -91,60 +91,60 @@ class PublicController extends Controller
         ));
     }
 
-    /**
-     * Halaman Tentang Kami
-     */
-    public function about()
-    {
-        $identitas = IdentitasPanti::first();
-        
-        // Statistik
-        $totalAnakAsuh = AnakPanti::count() ?? 0;
-        $totalDonasi = PenerimaanDonasi::sum('jumlah') ?? 0;
-        $totalPengeluaran = Pengeluaran::sum('jumlah') ?? 0;
-        $totalDonatur = Donatur::count() ?? 0;
-        
-        // Data Pengurus
-        $pengurus = collect();
-        if (Schema::hasTable('pengurus')) { // <--- Perbaikan di sini
-            $pengurus = DB::table('pengurus')
-                ->where('is_active', true)
-                ->orderBy('urutan', 'asc')
-                ->get();
-        }
-        
-        // Laporan Keuangan (Transparansi)
-        $laporanKeuangan = $this->getLaporanKeuangan();
-        
-        // Visi Misi
-        $visi = 'Menjadi panti asuhan yang unggul dalam pengasuhan, pendidikan, dan pemberdayaan anak-anak yatim dan dhuafa.';
-        $misi = [
-            'Memberikan pengasuhan yang holistik kepada anak-anak asuh.',
-            'Menyediakan akses pendidikan yang berkualitas.',
-            'Mengembangkan kemandirian ekonomi melalui pelatihan keterampilan.',
-            'Menjalin kemitraan dengan berbagai pihak untuk mendukung program.'
-        ];
-        
-        $values = [
-            (object) ['icon' => 'verified', 'title' => 'Amanah', 'description' => 'Menjalankan setiap amanah dengan penuh tanggung jawab'],
-            (object) ['icon' => 'handshake', 'title' => 'Transparan', 'description' => 'Terbuka dalam pengelolaan dana dan program'],
-            (object) ['icon' => 'favorite', 'title' => 'Peduli', 'description' => 'Memberikan kasih sayang tanpa batas kepada anak-anak asuh'],
-            (object) ['icon' => 'lightbulb', 'title' => 'Inovatif', 'description' => 'Terus berinovasi dalam program pengasuhan dan pendidikan']
-        ];
-        
-        return view('public.about', compact(
-            'identitas',
-            'totalAnakAsuh',
-            'totalDonasi',
-            'totalPengeluaran',
-            'totalDonatur',
-            'pengurus',
-            'laporanKeuangan',
-            'visi',
-            'misi',
-            'values'
-        ));
+/**
+ * Halaman Tentang Kami
+ */
+public function about()
+{
+    $identitas = IdentitasPanti::first();
+
+    // Statistik
+    $totalAnakAsuh    = AnakPanti::count() ?? 0;
+    $totalDonasi      = PenerimaanDonasi::sum('jumlah') ?? 0;
+    $totalPengeluaran = Pengeluaran::sum('jumlah') ?? 0;
+    $totalDonatur     = Donatur::count() ?? 0;
+
+    // Data Pengurus (aktif, urut)
+    $pengurus = collect();
+    if (Schema::hasTable('pengurus')) {
+        $pengurus = DB::table('pengurus')
+            ->where('is_active', true)
+            ->orderBy('urutan', 'asc')
+            ->get();
     }
+
+    // Laporan Keuangan (Transparansi)
+    $laporanKeuangan = $this->getLaporanKeuangan();
+
+    // Visi Misi
+    $visi = 'Menjadi panti asuhan yang unggul dalam pengasuhan, pendidikan, dan pemberdayaan anak-anak yatim dan dhuafa.';
+    $misi = [
+        'Memberikan pengasuhan yang holistik kepada anak-anak asuh.',
+        'Menyediakan akses pendidikan yang berkualitas.',
+        'Mengembangkan kemandirian ekonomi melalui pelatihan keterampilan.',
+        'Menjalin kemitraan dengan berbagai pihak untuk mendukung program.'
+    ];
+
+    $values = [
+        (object) ['icon' => 'verified',   'title' => 'Amanah',    'description' => 'Menjalankan setiap amanah dengan penuh tanggung jawab'],
+        (object) ['icon' => 'handshake',  'title' => 'Transparan', 'description' => 'Terbuka dalam pengelolaan dana dan program'],
+        (object) ['icon' => 'favorite',   'title' => 'Peduli',     'description' => 'Memberikan kasih sayang tanpa batas kepada anak-anak asuh'],
+        (object) ['icon' => 'lightbulb',  'title' => 'Inovatif',   'description' => 'Terus berinovasi dalam program pengasuhan dan pendidikan']
+    ];
+
+    return view('public.about', compact(
+        'identitas',
+        'totalAnakAsuh',
+        'totalDonasi',
+        'totalPengeluaran',
+        'totalDonatur',
+        'pengurus',
+        'laporanKeuangan',
+        'visi',
+        'misi',
+        'values'
+    ));
+}
 
     /**
      * Halaman Galeri

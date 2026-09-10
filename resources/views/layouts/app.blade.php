@@ -390,10 +390,6 @@
                                     <i class="fas fa-list menu-icon"></i> 
                                     <span class="menu-text" x-show="sidebarOpen">Daftar Pengurus</span>
                                 </a>
-                                <a href="{{ route('admin.pengurus.create') }}" class="menu-item {{ request()->routeIs('admin.pengurus.create') ? 'active' : '' }}">
-                                    <i class="fas fa-plus-circle menu-icon"></i> 
-                                    <span class="menu-text" x-show="sidebarOpen">Tambah Pengurus</span>
-                                </a>
                             </div>
                         </div>
 
@@ -424,10 +420,7 @@
                                     <i class="fas fa-list menu-icon"></i> 
                                     <span class="menu-text" x-show="sidebarOpen">Daftar Galeri</span>
                                 </a>
-                                <a href="{{ route('admin.galeri.create') }}" class="menu-item {{ request()->routeIs('admin.galeri.create') ? 'active' : '' }}">
-                                    <i class="fas fa-plus-circle menu-icon"></i> 
-                                    <span class="menu-text" x-show="sidebarOpen">Tambah Galeri</span>
-                                </a>
+                                
                             </div>
                         </div>
 
@@ -457,10 +450,6 @@
                                 <a href="{{ route('admin.berita.index') }}" class="menu-item {{ request()->routeIs('admin.berita.index') ? 'active' : '' }}">
                                     <i class="fas fa-list menu-icon"></i> 
                                     <span class="menu-text" x-show="sidebarOpen">Daftar Berita</span>
-                                </a>
-                                <a href="{{ route('admin.berita.create') }}" class="menu-item {{ request()->routeIs('admin.berita.create') ? 'active' : '' }}">
-                                    <i class="fas fa-plus-circle menu-icon"></i> 
-                                    <span class="menu-text" x-show="sidebarOpen">Tambah Berita</span>
                                 </a>
                             </div>
                         </div>
